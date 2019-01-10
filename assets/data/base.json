@@ -1,0 +1,16 @@
+{
+    "code":0,
+    "msg":"获取成功",
+    "basedata":{
+        "teams":[
+            {
+                "teamname": "皇家马德里",
+                "score":3
+            },
+            {
+                "teamname": "莫斯科中央陆军",
+                "score": 0
+            }
+        ]
+    }
+}

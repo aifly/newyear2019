@@ -1,0 +1,125 @@
+.lt-full {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.zmiti-text-overflow {
+  overflow: hidden;
+  white-space: nowrap;
+  word-break: break-all;
+  text-overflow: ellipsis;
+  -webkit-text-overflow: ellipsis;
+}
+
+.zmiti-play {
+  width: .8rem;
+  height: .8rem;
+  border-radius: 50%;
+  position: fixed;
+  z-index: 1000;
+  right: .5rem;
+  top: .5rem;
+}
+
+.zmiti-play.rotate {
+  -webkit-animation: rotate 5s linear infinite;
+  animation: rotate 5s linear infinite;
+}
+
+@-webkit-keyframes rotate {
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.zmiti-share-main-ui {
+  overflow: hidden;
+  width: 750px;
+  left: 50% !important;
+  margin-left: -375px;
+  background: #4081dd;
+  background: #ecf7ff;
+  display: -webkit-box;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  -webkit-box-orient: horizontal;
+  opacity: 0;
+  z-index: -1;
+}
+
+.zmiti-share-main-ui .zmiti-share-subtitle {
+  position: absolute;
+  left: 50%;
+  width: 700px;
+  -webkit-transform: translate3d(-50%, 0, 0);
+  transform: translate3d(-50%, 0, 0);
+}
+
+.zmiti-share-main-ui.show {
+  opacity: 1;
+  z-index: 1010;
+}
+
+.zmiti-share-main-ui .zmiti-share-main {
+  width: 89vw;
+  height: 80vh;
+  background: #ecf7ff;
+  position: relative;
+  z-index: 10;
+  border-radius: 10px;
+}
+
+.zmiti-share-main-ui .zmiti-share-main::before {
+  content: '';
+}
+
+.zmiti-share-main-ui .zmiti-share-btns {
+  height: 2.1rem;
+  color: #fff;
+  width: 66%;
+  left: 17%;
+  bottom: 0rem;
+  text-align: center;
+  position: absolute;
+  display: -webkit-box;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-pack: justify;
+  -webkit-box-align: start;
+}
+
+.zmiti-share-main-ui .zmiti-share-btns.restart {
+  -webkit-box-pack: center;
+}
+
+.zmiti-share-main-ui .zmiti-share-btns .zmiti-team {
+  position: absolute;
+  text-decoration: underline;
+  left: 50%;
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+  bottom: .3rem;
+  color: #ca141f;
+}
+
+.zmiti-share-main-ui .zmiti-share-btns > div {
+  background: #ca141f;
+  line-height: .9rem;
+  border-radius: 6px;
+  width: 2.5rem;
+  font-size: .45rem;
+}
+
+.zmiti-share-main-ui .zmiti-share-btns.btn-enter-active, .zmiti-share-main-ui .zmiti-share-btns.btn-leave-active {
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.zmiti-share-main-ui .zmiti-share-btns.btn-enter, .zmiti-share-main-ui .zmiti-share-btns.btn-leave-to {
+  opacity: 0;
+}

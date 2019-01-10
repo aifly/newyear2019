@@ -1,0 +1,55 @@
+{
+    "code":0,
+    "msg":"获取成功",
+    "list":[
+        {
+            "headimgurl":"./assets/images/xiaoxin-head.png",
+            "nickname":"小新",
+            "text": "小新预测皇家马德里会羸",
+            "image": "",
+            "video": "",
+            "isreverse":false,
+            "videoposter":""
+        }, {
+            "headimgurl": "./assets/images/xiaoxin-head.png",
+            "nickname": "小新",
+            "text": "比分为3:1",
+            "image":"",
+            "video":"",
+            "isreverse":true,
+            "videoposter":""
+        }, {
+            "headimgurl": "./assets/images/xiaoxin-head.png",
+            "nickname": "小新",
+            "image": "./assets/images/chart.png",
+            "text": "",
+            "video": "",
+            "isreverse":false,
+            "videoposter":""
+        }, {
+            "headimgurl": "./assets/images/xiaoxin-head.png",
+            "nickname": "专家",
+            "image": "",
+            "text": "我同意小新的说法",
+            "video": "",
+            "isreverse":true,
+            "videoposter":""
+        }, {
+            "headimgurl": "./assets/images/xiaoxin-head.png",
+            "nickname": "专家",
+            "image": "",
+            "text": "",
+            "video": "./assets/video/index.mp4",
+            "isreverse":false,
+            "videoposter":"./assets/images/poster.jpg"
+        }, {
+            "headimgurl": "./assets/images/xiaoxin-head.png",
+            "nickname": "专家",
+            "image": "",
+            "text": "所以我认为B队会羸",
+            "video": "",
+            "isreverse":true,
+            "videoposter": ""
+        }
+    ]
+}

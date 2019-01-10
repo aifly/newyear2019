@@ -1,0 +1,92 @@
+﻿@import "../css/base.scss";
+$baseColor: #fcffb4;
+$viewW: 750px;
+$bgColor: #4081dd;
+$color:#ca141f;
+.zmiti-share-main-ui {
+	overflow: hidden;
+	width:750px;
+	left: 50% !important;
+	margin-left: -$viewW/2;
+	background: $bgColor;
+	.zmiti-share-subtitle{
+		@include pos(a);
+		left: 50%;
+		width: 700px;
+		@include transform(translate3d(-50%,0,0));
+	}
+	background:#ecf7ff;
+	@include displayBox(horizontal);
+
+	opacity:0;
+	z-index: -1;
+
+	&.show{
+		opacity: 1;
+		z-index: 1010;
+	}
+
+	.zmiti-share-main{
+		width: 89vw;
+		height: 80vh;
+		background:#ecf7ff;
+		
+		@include pos(r);
+		z-index: 10;
+		@include br(10px);
+
+		&::before{
+			content:'';
+
+		}
+	}
+ 	
+
+ 	.zmiti-share-btns{
+		height: 2.1rem;
+		color:#fff;
+		width: 66%;
+		left: 17%;
+		bottom: 0rem;
+		text-align: center;
+		@include pos(a);
+		@include displayBox(horizontal);
+		-webkit-box-pack:justify;
+		-webkit-box-align:start;
+
+		&.restart{
+			-webkit-box-pack:center
+
+		}
+
+		.zmiti-team{
+			@include pos(a);
+			text-decoration: underline;
+			left: 50%;
+			@include transform(translate(-50%,0));
+			bottom: .3rem;
+			color:$color;
+		}
+
+		&>div{
+			background: $color;
+			line-height: .9rem;
+			@include br(6px);
+			width: 2.5rem;
+			font-size: .45rem;
+		}
+
+		&.btn-enter-active, &.btn-leave-active {
+			@include transition(.4s);
+		}
+
+		&.btn-enter, &.btn-leave-to {
+			
+			opacity:0;
+		}
+	}
+
+	
+
+
+}

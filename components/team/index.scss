@@ -1,0 +1,69 @@
+﻿@import "../css/base.scss";
+.zmiti-team-main-ui{
+	z-index: 102222;
+	@include displayBox(horizontal);
+	&.team-enter-active,
+	&.team-leave-active {
+		@include transition(.5s);
+	}
+
+	&.team-enter,
+	&.team-leave-to {
+		opacity: 0;
+	}
+	.zmiti-team-main{
+		width: 67%;
+		color:#b37e16;
+		min-height: 500px;
+		font-size:28px;
+
+		
+		&>div{
+			margin-top: 20px;
+			aside{
+				&:nth-of-type(1) {
+					font-weight: bold;
+					label{
+						opacity:0;
+					}
+					width: 90px;
+					//border:1px solid red;
+					@include displayBox(horizontal);
+					-webkit-box-pack:justify;
+				}
+				&:nth-of-type(2){
+					//border:1px solid red;
+					-webkit-box-flex:1;
+					margin-left: 20px;
+					@include pos(r);
+					&:before{
+						content:"：";
+						@include pos(a);
+						left: -26px;
+					}
+				}
+				&.zmiti-chupin{
+					&:before {
+						content: "：";
+						@include pos(a);
+						left: -28px;
+					}
+				}
+			}
+
+			@include displayBox(horizontal);
+			-webkit-box-pack:justify;
+			-webkit-box-align: start;
+
+
+			width: 100%;
+
+
+			&:nth-of-type(1){
+				span:nth-of-type(1){
+					letter-spacing: 0;
+				}
+			}
+		}
+	}
+}

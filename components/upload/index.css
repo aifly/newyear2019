@@ -1,0 +1,304 @@
+.lt-full {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.zmiti-text-overflow {
+  overflow: hidden;
+  white-space: nowrap;
+  word-break: break-all;
+  text-overflow: ellipsis;
+  -webkit-text-overflow: ellipsis;
+}
+
+.zmiti-play {
+  width: .8rem;
+  height: .8rem;
+  border-radius: 50%;
+  position: fixed;
+  z-index: 1000;
+  right: .5rem;
+  top: .5rem;
+}
+
+.zmiti-play.rotate {
+  -webkit-animation: rotate 5s linear infinite;
+  animation: rotate 5s linear infinite;
+}
+
+@-webkit-keyframes rotate {
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.zmiti-upload-main-ui {
+  background: #ecf7ff;
+  z-index: 110;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C {
+  color: #f4d893;
+  text-align: center;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  position: absolute;
+  width: 88vw;
+  height: 84vh;
+  left: 6vw;
+  top: 4vh;
+  z-index: 2;
+  border-radius: 20px;
+  display: -webkit-box;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  -webkit-box-orient: vertical;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C.upload-enter, .zmiti-upload-main-ui .zmiti-upload-C.upload-leave-to {
+  opacity: 0;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C h1,
+.zmiti-upload-main-ui .zmiti-upload-C h2,
+.zmiti-upload-main-ui .zmiti-upload-C h3,
+.zmiti-upload-main-ui .zmiti-upload-C h5 {
+  font-weight: normal;
+  width: 500px;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C h3 {
+  margin-left: 20px;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C .zmiti-upload {
+  position: relative;
+  margin: 4vh 0 0 0;
+  width: 250px;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C .zmiti-upload div {
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  text-align: center;
+  width: 100%;
+  margin-top: -15px;
+  opacity: 0;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C .zmiti-upload.uploading {
+  -webkit-animation: flash 1s infinite ease-out alternate;
+  animation: flash 1s infinite ease-out alternate;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C .zmiti-upload.uploading div {
+  opacity: 1;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C .zmiti-upload .zmiti-file {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C > div:nth-of-type(1) {
+  -webkit-box-flex: 4;
+  display: -webkit-box;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  -webkit-box-orient: vertical;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C > div:nth-of-type(1) .zmiti-rechoose {
+  margin-top: 20px;
+  text-decoration: underline;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C > div:nth-of-type(2) {
+  -webkit-box-flex: 2;
+  position: relative;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C > div:nth-of-type(2) h3 img {
+  width: 200px;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C > div:nth-of-type(2) .zmiti-upload-sex {
+  margin: 0 auto;
+  position: relative;
+  top: 30px;
+  display: -webkit-box;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  -webkit-box-orient: horizontal;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C > div:nth-of-type(2) .zmiti-upload-sex > div {
+  margin: 0 50px;
+  position: relative;
+  width: 170px;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C > div:nth-of-type(2) .zmiti-upload-sex .zmiti-sex-checked {
+  position: absolute;
+  width: 40px;
+  left: 67%;
+  bottom: 14px;
+  overflow: hidden;
+}
+
+.zmiti-upload-main-ui .zmiti-upload-C > div:nth-of-type(2) .zmiti-upload-sex .zmiti-sex-checked img {
+  -webkit-transform: scale(0.8);
+  transform: scale(0.8);
+}
+
+.zmiti-upload-main-ui .zmiti-nickname {
+  position: absolute;
+  top: 64px;
+  color: #333;
+  right: 140px;
+  width: 30px;
+}
+
+.zmiti-upload-main-ui .zmiti-share-mask {
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: -webkit-box;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  -webkit-box-orient: vertical;
+}
+
+.zmiti-upload-main-ui .zmiti-share-mask > img {
+  width: 400px;
+  position: absolute;
+  margin: 30px 30px 0 0;
+  right: 0px;
+}
+
+.zmiti-upload-main-ui .zmiti-share-mask > div {
+  color: #fff;
+  width: 94%;
+  margin: 60px auto;
+  position: relative;
+  top: 80px;
+  line-height: 44px;
+}
+
+.zmiti-upload-main-ui .zmiti-share-mask > div img {
+  width: 80px;
+  margin: 0 auto;
+  display: block;
+}
+
+.zmiti-upload-main-ui .zmiti-share-mask > div .zmiti-share-logos {
+  display: -webkit-box;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  -webkit-box-orient: horizontal;
+}
+
+.zmiti-upload-main-ui .zmiti-share-mask > div .zmiti-share-logos > div {
+  margin: 0 30px;
+}
+
+.zmiti-upload-main-ui .zmiti-share-ui {
+  display: -webkit-box;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  -webkit-box-orient: vertical;
+  color: #fe9a74;
+}
+
+.zmiti-upload-main-ui .zmiti-share-ui > div {
+  margin: 3vh 0;
+}
+
+.zmiti-upload-main-ui .zmiti-share-ui .zmiti-img-tip {
+  margin-top: -20px;
+  font-size: 26px;
+  top: -26px;
+  text-align: center;
+  width: 100%;
+  font-size: 30px;
+  position: absolute;
+  z-index: 100;
+}
+
+.zmiti-upload-main-ui .zmiti-share-ui .zmiti-merge-img {
+  position: relative;
+  width: 750px;
+}
+
+.zmiti-upload-main-ui .zmiti-share-ui .zmiti-merge-img canvas {
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  opacity: 0;
+  position: absolute;
+}
+
+.zmiti-upload-main-ui .zmiti-share-ui .zmiti-merge-img .zmiti-card-info {
+  position: absolute;
+  color: #333;
+  font-size: 14px;
+  bottom: 2px;
+  right: 120px;
+  background: #fff;
+  padding: 0 16px;
+  border: 1px solid #ccc;
+  line-height: 36px;
+  -webkit-transform: scale(0.95);
+  transform: scale(0.95);
+}
+
+.zmiti-upload-main-ui .zmiti-share-ui .zmiti-merge-img .zmiti-card-info > div {
+  display: -webkit-box;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-pack: justify;
+  font-family: Georgia;
+}
+
+.zmiti-upload-main-ui .zmiti-share-ui .zmiti-merge-img .zmiti-card-info > div span {
+  font-size: 34px;
+  color: #0372c3;
+}
+
+.zmiti-upload-main-ui .zmiti-share-ui .zmiti-share-btns {
+  display: -webkit-box;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  -webkit-box-orient: horizontal;
+  margin: 3vh 0;
+  position: relative;
+  top: -2vh;
+}
+
+.zmiti-upload-main-ui .zmiti-share-ui .zmiti-share-btns > div {
+  margin: 0 60px;
+  width: 200px;
+}
+
+.zmiti-upload-main-ui .zmiti-cache-img {
+  position: fixed;
+  z-index: -1;
+  left: 100%;
+}
+
+@-webkit-keyframes flash {
+  to {
+    opacity: 0;
+  }
+}
