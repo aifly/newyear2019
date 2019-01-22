@@ -8,6 +8,12 @@ $bgColor: #4081dd;
     overflow: hidden;
     width: $viewW !important;
     background:$bgColor;
+    @include pos(r);
+    .zmiti-index-img{
+        @include pos(a);
+        width: 100%;
+        z-index: 1000;
+    }
 
     .zmiti-img{
         @include pos(r);
