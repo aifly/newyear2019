@@ -37,6 +37,8 @@
     position: absolute;
     width: 100%;
     z-index: 1000; }
+  .zmiti-index-main-ui .zmiti-index-mask {
+    background: rgba(0, 0, 0, 0.6); }
   .zmiti-index-main-ui .zmiti-img {
     position: relative;
     z-index: 20; }

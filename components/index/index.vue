@@ -3,6 +3,9 @@
 		<div ref='page' v-if='show' class="lt-full zmiti-index-main-ui " >
 			<img v-if='showImg' :src="imgs.index" alt="" class="zmiti-index-img"  v-tap='[playVideo]'>
 			<video v-show='!showImg' ref='video1' width="100%"  :src="indexVideo"></video>
+			<div class='zmiti-index-mask lt-full'>
+				<div>说明文字说明文字</div>
+			</div>
 		</div>
 	</transition>
 </template>
@@ -61,12 +64,7 @@
 				video.addEventListener('ended',()=>{
 					alert(2)
 				})
-
 			},
-			 
-			 
-			 
-			 
 			touchstart(e){
 				e.preventDefault();
 				e.stopPropagation();
