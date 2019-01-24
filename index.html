@@ -49,10 +49,9 @@
 			});
 
 			//window.location.href = encodeURI(window.location.href)
-
 			wx.ready(function () {
 				var config = {
-					title: document.title,
+					title:title|| document.title,
 					desc: desc|| window.desc,
 					//link: encodeURIComponent(window.location.href.split('?')[0].split('#')[0]),
 					link: 'http://h5.zhongguowangshi.com/h5/'+window.h5name+'/index.html',
@@ -78,16 +77,16 @@
 		}
 
 		/*
-		*/
 		loadScript('./assets/js/base.js');
 		loadScript('./assets/js/index.js');
+		*/
 	
 	</script>
 
 	<!-- 
+	 -->
 	<script src='./assets/js/base.js'></script>
 	<script src='http://localhost:4056/index.js' onerror="loadScript('./assets/js/index.js')"></script>
-	 -->
 </body>
 
 </html>

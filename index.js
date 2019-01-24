@@ -146,7 +146,7 @@ new Vue({
 
 		});
 		this.updatePv();
-		//zmitiUtil.getOauthurl(obserable);
+		zmitiUtil.getOauthurl(obserable);
 		//zmitiUtil.wxConfig(document.title, window.desc);
 		
 		return;
