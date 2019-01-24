@@ -3,16 +3,14 @@
   height: 100%;
   position: absolute;
   left: 0;
-  top: 0;
-}
+  top: 0; }
 
 .zmiti-text-overflow {
   overflow: hidden;
   white-space: nowrap;
   word-break: break-all;
   text-overflow: ellipsis;
-  -webkit-text-overflow: ellipsis;
-}
+  -webkit-text-overflow: ellipsis; }
 
 .zmiti-play {
   width: .8rem;
@@ -21,114 +19,94 @@
   position: fixed;
   z-index: 1223000 !important;
   right: .5rem;
-  top: .5rem;
-}
-
-.zmiti-play.rotate {
-  -webkit-animation: rotate 5s linear infinite;
-  animation: rotate 5s linear infinite;
-}
+  top: .5rem; }
+  .zmiti-play.rotate {
+    -webkit-animation: rotate 5s linear infinite;
+    animation: rotate 5s linear infinite; }
 
 @-webkit-keyframes rotate {
   to {
     -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-
+    transform: rotate(360deg); } }
 .zmiti-index-main-ui {
   overflow: hidden;
   width: 750px !important;
   background: #4081dd;
-}
+  position: relative; }
+  .zmiti-index-main-ui .zmiti-index-img {
+    position: absolute;
+    width: 100%;
+    z-index: 1000; }
+  .zmiti-index-main-ui .zmiti-index-mask {
+    background: rgba(0, 0, 0, 0.6); }
+  .zmiti-index-main-ui .zmiti-img {
+    position: relative;
+    z-index: 20; }
+  .zmiti-index-main-ui .zmiti-tip {
+    position: absolute;
+    width: 100%;
+    text-align: center; }
+  .zmiti-index-main-ui .zmiti-wish-text {
+    position: absolute;
+    z-index: 30;
+    top: 60px;
+    width: 90%;
+    left: 5%;
+    color: #fff; }
+  .zmiti-index-main-ui .zmiti-poster {
+    z-index: 100;
+    background: #000;
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    -webkit-box-orient: horizontal; }
+    .zmiti-index-main-ui .zmiti-poster img {
+      width: auto;
+      max-width: 100%;
+      max-height: 100%;
+      height: 100%;
+      display: block; }
+  .zmiti-index-main-ui .zmiti-create-btn {
+    margin: 80px auto;
+    width: 180px;
+    height: 60px;
+    line-height: 60px;
+    color: #fff;
+    text-align: center;
+    border-radius: 10px;
+    background: blue; }
+  .zmiti-index-main-ui .zmiti-start {
+    position: absolute;
+    bottom: 100px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    text-align: center;
+    background: #ccc;
+    line-height: 100px;
+    left: 50%;
+    margin-left: -50px;
+    z-index: 10;
+    -webkit-transition: 0.1s;
+    transition: 0.1s; }
+    .zmiti-index-main-ui .zmiti-start.active {
+      -webkit-transform: scale(0.95);
+      transform: scale(0.95); }
+  .zmiti-index-main-ui .zmiti-canvas {
+    position: absolute;
+    left: 0;
+    bottom: 0; }
+  .zmiti-index-main-ui .zmiti-btns {
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    -webkit-box-orient: horizontal; }
+    .zmiti-index-main-ui .zmiti-btns div {
+      width: 140px;
+      height: 60px;
+      background: #ccc;
+      text-align: center;
+      line-height: 60px;
+      margin: 0 20px; }
 
-.zmiti-index-main-ui .zmiti-img {
-  position: relative;
-  z-index: 20;
-}
-
-.zmiti-index-main-ui .zmiti-tip {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-}
-
-.zmiti-index-main-ui .zmiti-wish-text {
-  position: absolute;
-  z-index: 30;
-  top: 60px;
-  width: 90%;
-  left: 5%;
-  color: #fff;
-}
-
-.zmiti-index-main-ui .zmiti-poster {
-  z-index: 100;
-  background: #000;
-  display: -webkit-box;
-  -webkit-box-align: center;
-  -webkit-box-pack: center;
-  -webkit-box-orient: horizontal;
-}
-
-.zmiti-index-main-ui .zmiti-poster img {
-  width: auto;
-  max-width: 100%;
-  max-height: 100%;
-  height: 100%;
-  display: block;
-}
-
-.zmiti-index-main-ui .zmiti-create-btn {
-  margin: 80px auto;
-  width: 180px;
-  height: 60px;
-  line-height: 60px;
-  color: #fff;
-  text-align: center;
-  border-radius: 10px;
-  background: blue;
-}
-
-.zmiti-index-main-ui .zmiti-start {
-  position: absolute;
-  bottom: 100px;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  text-align: center;
-  background: #ccc;
-  line-height: 100px;
-  left: 50%;
-  margin-left: -50px;
-  z-index: 10;
-  -webkit-transition: 0.1s;
-  transition: 0.1s;
-}
-
-.zmiti-index-main-ui .zmiti-start.active {
-  -webkit-transform: scale(0.95);
-  transform: scale(0.95);
-}
-
-.zmiti-index-main-ui .zmiti-canvas {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-}
-
-.zmiti-index-main-ui .zmiti-btns {
-  display: -webkit-box;
-  -webkit-box-align: center;
-  -webkit-box-pack: center;
-  -webkit-box-orient: horizontal;
-}
-
-.zmiti-index-main-ui .zmiti-btns div {
-  width: 140px;
-  height: 60px;
-  background: #ccc;
-  text-align: center;
-  line-height: 60px;
-  margin: 0 20px;
-}
+/*# sourceMappingURL=index.css.map */

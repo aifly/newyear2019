@@ -1,6 +1,7 @@
 import Vue from "vue";
 import './components/css/index.css';
 import Index from './components/index/index';
+import Loading from './components/loading/index';
 import Obserable from './components/lib/obserable';
 import {
 	imgs
@@ -55,18 +56,8 @@ new Vue({
 		<Loading v-if='!show' :width='width' :obserable='obserable'></Loading>
 		*/
 		template: `<div>
+		<Loading :width='width' :obserable='obserable'></Loading>
 		<Index :pv='pv' :nickname='nickname' :headimgurl='headimgurl'   v-if='show && !isShare'  :obserable='obserable'></Index>
-		<div  v-if='!loaded' :style='{background:"#158ae4"}' class='zmiti-loading lt-full'>
-			<div class='zmiti-loading-ui'>
-				 <a href="#">
-			  		<section class='zmiti-head' :style="{background:'url(./assets/images/logo.png) no-repeat center / cover'}"></section>
-			        <div class="line1"></div>
-			        <div class="line2"></div>
-			        <div class="line3"></div>
-					<div class='zmiti-progress'>{{width}}%</div>
-			    </a>
-			</div>
-		</div>
 	</div>`,
 	methods: {
 
@@ -101,6 +92,7 @@ new Vue({
 	},
 	components: {
 		Index,
+		Loading
 	},
 	mounted() {
 
@@ -125,9 +117,12 @@ new Vue({
 	
 
 		s.loading(arr, (scale) => {
-			s.width = scale *100|0;
+			s.width = (scale) * 400;
+
 		}, () => {
-			
+			obserable.trigger({
+				type:'hideloading'
+			})
 			s.show = true;
 			s.loaded = true;
 			

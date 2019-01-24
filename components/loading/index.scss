@@ -2,13 +2,15 @@
 
 $baseColor: #fcffb4;
 $viewW: 750px;
-$bgColor: #4081dd;
+$bgColor: #d1432f;
 
 .zmiti-loading {
     overflow: hidden;
     width: $viewW !important;
     left: 50% !important;
     margin-left: -$viewW / 2;
+
+    background:$bgColor;
 
     @include displayBox(horizontal);
 
@@ -25,32 +27,50 @@ $bgColor: #4081dd;
     $color: #f2edc7;
 
     .zmiti-loading-bar {
+        @include transform(scale(.8));
         width: 400px;
         & > div {
             width: 100%;
-            height: 50px;
-            margin-top: 20px;
+            height: 40px;
+            margin-top: -50px;
 
-            @include br(30px);
+            @include br(10px);
 
-            border: 2px solid $color;
+            border: 4px solid #52701e;
+
+            background:#dbeebb;
 
             @include pos(r);
 
             box-sizing: border-box;
             overflow: hidden;
+            
+            @include displayBox(horizontal);
+            -webkit-box-pack: justify;
+
+            div{
+                width: 10px;
+                height: 10px;
+                background:#b8d193;
+                @include br();
+            }
 
             span {
                 @include pos(a);
 
                 width: 0;
                 height: 40px;
-                top: 3px;
-                left: 2px;
+                top: -4px;
+                left: -4px;
+                border:4px solid #52701e;
+                box-sizing:border-box;
                 background: $color;
 
-                @include br(30px);
+                @include br(10px);
             }
+        }
+        img{
+            width: auto;
         }
     }
 }

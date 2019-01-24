@@ -58,7 +58,11 @@
 
 	var _componentsIndexIndex2 = _interopRequireDefault(_componentsIndexIndex);
 
-	var _componentsLibObserable = __webpack_require__(18);
+	var _componentsLoadingIndex = __webpack_require__(18);
+
+	var _componentsLoadingIndex2 = _interopRequireDefault(_componentsLoadingIndex);
+
+	var _componentsLibObserable = __webpack_require__(23);
 
 	var _componentsLibObserable2 = _interopRequireDefault(_componentsLibObserable);
 
@@ -70,9 +74,9 @@
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	__webpack_require__(19);
+	__webpack_require__(24);
 
-	var _vueJsTap = __webpack_require__(20);
+	var _vueJsTap = __webpack_require__(25);
 
 	var _vueJsTap2 = _interopRequireDefault(_vueJsTap);
 
@@ -117,7 +121,7 @@
 	 	<Upload :pv='pv' :nickname='nickname' :headimgurl='headimgurl'   v-if='show && !isShare'  :obserable='obserable'></Upload>
 	 	<Loading v-if='!show' :width='width' :obserable='obserable'></Loading>
 	 	*/
-		template: '<div>\n\t\t<Index :pv=\'pv\' :nickname=\'nickname\' :headimgurl=\'headimgurl\'   v-if=\'show && !isShare\'  :obserable=\'obserable\'></Index>\n\t\t<div  v-if=\'!loaded\' :style=\'{background:"#158ae4"}\' class=\'zmiti-loading lt-full\'>\n\t\t\t<div class=\'zmiti-loading-ui\'>\n\t\t\t\t <a href="#">\n\t\t\t  \t\t<section class=\'zmiti-head\' :style="{background:\'url(./assets/images/logo.png) no-repeat center / cover\'}"></section>\n\t\t\t        <div class="line1"></div>\n\t\t\t        <div class="line2"></div>\n\t\t\t        <div class="line3"></div>\n\t\t\t\t\t<div class=\'zmiti-progress\'>{{width}}%</div>\n\t\t\t    </a>\n\t\t\t</div>\n\t\t</div>\n\t</div>',
+		template: '<div>\n\t\t<Loading :width=\'width\' :obserable=\'obserable\'></Loading>\n\t\t<Index :pv=\'pv\' :nickname=\'nickname\' :headimgurl=\'headimgurl\'   v-if=\'show && !isShare\'  :obserable=\'obserable\'></Index>\n\t</div>',
 		methods: {
 
 			loading: function loading(arr, fn, fnEnd) {
@@ -148,7 +152,8 @@
 			updatePv: function updatePv() {}
 		},
 		components: {
-			Index: _componentsIndexIndex2['default']
+			Index: _componentsIndexIndex2['default'],
+			Loading: _componentsLoadingIndex2['default']
 		},
 		mounted: function mounted() {
 			var _this = this;
@@ -170,9 +175,11 @@
 			if (this.isShare) {}
 
 			s.loading(arr, function (scale) {
-				s.width = scale * 100 | 0;
+				s.width = scale * 400;
 			}, function () {
-
+				obserable.trigger({
+					type: 'hideloading'
+				});
 				s.show = true;
 				s.loaded = true;
 			});
@@ -200,7 +207,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
-	 * Vue.js v2.5.16
+	 * Vue.js v2.5.17
 	 * (c) 2014-2018 Evan You
 	 * Released under the MIT License.
 	 */
@@ -5276,7 +5283,7 @@
 	  value: FunctionalRenderContext
 	});
 
-	Vue.version = '2.5.16';
+	Vue.version = '2.5.17';
 
 	/*  */
 
@@ -11153,15 +11160,18 @@
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {var apply = Function.prototype.apply;
+	/* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
+	            (typeof self !== "undefined" && self) ||
+	            window;
+	var apply = Function.prototype.apply;
 
 	// DOM APIs, for completeness
 
 	exports.setTimeout = function() {
-	  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
+	  return new Timeout(apply.call(setTimeout, scope, arguments), clearTimeout);
 	};
 	exports.setInterval = function() {
-	  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
+	  return new Timeout(apply.call(setInterval, scope, arguments), clearInterval);
 	};
 	exports.clearTimeout =
 	exports.clearInterval = function(timeout) {
@@ -11176,7 +11186,7 @@
 	}
 	Timeout.prototype.unref = Timeout.prototype.ref = function() {};
 	Timeout.prototype.close = function() {
-	  this._clearFn.call(window, this._id);
+	  this._clearFn.call(scope, this._id);
 	};
 
 	// Does not start the time, just sets up the members needed.
@@ -11204,7 +11214,7 @@
 
 	// setimmediate attaches itself to the global object
 	__webpack_require__(3);
-	// On some exotic environments, it's not clear which object `setimmeidate` was
+	// On some exotic environments, it's not clear which object `setimmediate` was
 	// able to install onto.  Search each possibility in the same order as the
 	// `setimmediate` library.
 	exports.setImmediate = (typeof self !== "undefined" && self.setImmediate) ||
@@ -11961,7 +11971,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "F:\\xuchang2019\\project\\newyear2019\\components\\index\\index.vue"
+	  var id = "E:\\project\\newyear2019\\components\\index\\index.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -11976,29 +11986,10 @@
 	// <template>
 	// 	<transition name='index'>
 	// 		<div ref='page' v-if='show' class="lt-full zmiti-index-main-ui " >
-	// 			<div class='zmiti-start' :class='{"active":showCanvas}'  @touchstart='touchstart' @touchend='touchend' >
-	// 				长按
-	// 			</div>
-	// 			<img class='zmiti-img' v-if='iNow>=0' :src='imgs[(imgDone?"img":"gif")+indexArr[iNow]]'/>
-	// 			<div  class='zmiti-tip' style='color:#fff;text-align:center;top:60px'>长按选择图片</div>
-	// 			<div v-if='imgDone && !result.wish' style='color:#fff;text-align:center'>长按选择祝福语</div>
-	// 			<div class='zmiti-wish-text' v-if='imgDone'>
-	// 				{{wishes[textIndexArr[textInow]].wish}}
-	// 			</div>
-	//
-	// 			<div class='zmiti-btns' v-if='showBtns'>
-	// 				<div v-tap='[cancel]'>取消</div>
-	// 				<div v-tap='[sure]'>确定</div>
-	// 			</div>
-	//
-	// 			<div class='zmiti-create-btn' v-if='result.wish' v-tap='[create]'>生成海报</div>
-	//
-	// 			<canvas v-show='showCanvas' :width="viewW" height="500" ref='canvas' class='zmiti-canvas'>
-	//
-	// 			</canvas>
-	//
-	// 			<div class='lt-full zmiti-poster' v-if='createImg'>
-	// 				<img :src="imgs.wish" alt="">
+	// 			<img v-if='showImg' :src="imgs.index" alt="" class="zmiti-index-img"  v-tap='[playVideo]'>
+	// 			<video v-show='!showImg' ref='video1' width="100%"  :src="indexVideo"></video>
+	// 			<div class='zmiti-index-mask lt-full'>
+	// 				<div>说明文字说明文字</div>
 	// 			</div>
 	// 		</div>
 	// 	</transition>
@@ -12029,9 +12020,11 @@
 		data: function data() {
 			return {
 				imgs: _libAssetsJs.imgs,
+				bg: '',
 				viewH: window.innerHeight,
 				viewW: window.innerWidth,
-				count: 0,
+				indexVideo: window.config.indexvideo,
+				showImg: true,
 				points: [],
 				len: 9,
 				wishes: window.config.wishes,
@@ -12059,90 +12052,18 @@
 			imgStart: function imgStart(e) {
 				e.preventDefault();
 			},
-			initPoints: function initPoints() {
-				var _this = this;
 
-				var canvas = this.$refs['canvas'];
-				var context = canvas.getContext('2d');
-				canvas.height = this.viewH;
-				var width = canvas.width,
-				    height = canvas.height;
-				var img = new Image();
-				var center = [canvas.width >> 1, height - 130];
-				img.onload = function () {
-					for (var i = 0; i < 100; i++) {
-						var p = new _point2['default']({
-							img: img,
-							context: context
-						});
-						p.speedY = (p.defaultY - center[1]) / (p.defaultX - center[0]) * p.speedX;
-						_this.points.push(p);
-					}
-				};
-				img.src = _libAssetsJs.imgs.point;
+			playVideo: function playVideo() {
+				var video = this.$refs['video1'];
+				video.play();
+				this.showImg = false;
 
-				var animationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame,
-				    m = Math;
-
-				var render = function render() {
-					if (width <= 0) {
-						width = canvas.width, height = canvas.height;
-					}
-					context.clearRect(0, 0, width, height);
-					_this.points.map(function (point, i) {
-						if (point.x < center[0]) {
-							point.x += Math.abs(point.speedX);
-						} else {
-							point.x += -Math.abs(point.speedX);
-						}
-						if (point.y < center[1]) {
-							point.y += Math.abs(point.speedY);
-						} else {
-							point.y += -Math.abs(point.speedY);
-						}
-						point.angle += point.speed;
-						//point.angle = (point.angle | 0)
-						point.angle %= 360;
-						//point.x += m.sin(point.angle/180*m.PI)*point.speedX;
-
-						/* point.y -= 3;
-	     point.y = this.viewH - 100; */
-						if (Math.abs(point.y - center[1]) < 50 && Math.abs(point.x - center[0]) < 50) {
-							point.y = point.defaultY;
-							point.x = point.defaultX;
-						}
-						point.update();
-					});
-					animationFrame(render);
-				};
-
-				render();
-			},
-			sure: function sure() {
-				if (!this.imgDone) {
-					this.imgDone = true;
-					this.showBtns = false;
-				} else {
-					//开始显示文字
-					this.result.img = this.imgs["img" + this.indexArr[this.iNow]];
-					this.result.wish = this.wishes[this.textIndexArr[this.textInow]].wish;
-					this.showBtns = false;
-				}
-			},
-			create: function create() {
-				this.createImg = true;
-			},
-			cancel: function cancel(e) {
-				this.showBtns = false;
-				/* if(this.imgDone){
-	   	this.imgDone = false;
-	   }
-	   else{
-	   	this.imgDone = true;
-	   } */
+				video.addEventListener('ended', function () {
+					alert(2);
+				});
 			},
 			touchstart: function touchstart(e) {
-				var _this2 = this;
+				var _this = this;
 
 				e.preventDefault();
 				e.stopPropagation();
@@ -12155,23 +12076,23 @@
 				}
 
 				this.timer = setInterval(function () {
-					if (_this2.imgDone) {
-						if (_this2.textInow === 0) {
-							_this2.textIndexArr.sort(function () {
+					if (_this.imgDone) {
+						if (_this.textInow === 0) {
+							_this.textIndexArr.sort(function () {
 								return Math.random() > .5;
 							});
 						}
-						_this2.textInow++;
-						_this2.textInow %= _this2.len;
-						console.log(_this2.textIndexArr, _this2.textInow);
+						_this.textInow++;
+						_this.textInow %= _this.len;
+						console.log(_this.textIndexArr, _this.textInow);
 					} else {
-						if (_this2.iNow === 0) {
-							_this2.indexArr.sort(function () {
+						if (_this.iNow === 0) {
+							_this.indexArr.sort(function () {
 								return Math.random() > .5;
 							});
 						}
-						_this2.iNow++;
-						_this2.iNow %= _this2.len;
+						_this.iNow++;
+						_this.iNow %= _this.len;
 					}
 				}, 1000);
 			},
@@ -12186,21 +12107,7 @@
 				this.showIndex = true;
 			}
 		},
-		mounted: function mounted() {
-			var _this3 = this;
-
-			this.indexArr = [];
-			this.textIndexArr = [];
-			for (var i = 1; i < this.len + 1; i++) {
-				this.indexArr[i - 1] = i;
-				this.textIndexArr[i - 1] = i - 1;
-			}
-
-			this.initPoints();
-			setTimeout(function () {
-				_this3.showIndex = true;
-			}, 1000);
-		}
+		mounted: function mounted() {}
 	};
 
 	// </script>
@@ -12241,7 +12148,7 @@
 
 
 	// module
-	exports.push([module.id, ".lt-full {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.zmiti-text-overflow {\n  overflow: hidden;\n  white-space: nowrap;\n  word-break: break-all;\n  text-overflow: ellipsis;\n  -webkit-text-overflow: ellipsis;\n}\n\n.zmiti-play {\n  width: .8rem;\n  height: .8rem;\n  border-radius: 50%;\n  position: fixed;\n  z-index: 1223000 !important;\n  right: .5rem;\n  top: .5rem;\n}\n\n.zmiti-play.rotate {\n  -webkit-animation: rotate 5s linear infinite;\n  animation: rotate 5s linear infinite;\n}\n\n@-webkit-keyframes rotate {\n  to {\n    -webkit-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n\n.zmiti-index-main-ui {\n  overflow: hidden;\n  width: 750px !important;\n  background: #4081dd;\n}\n\n.zmiti-index-main-ui .zmiti-img {\n  position: relative;\n  z-index: 20;\n}\n\n.zmiti-index-main-ui .zmiti-tip {\n  position: absolute;\n  width: 100%;\n  text-align: center;\n}\n\n.zmiti-index-main-ui .zmiti-wish-text {\n  position: absolute;\n  z-index: 30;\n  top: 60px;\n  width: 90%;\n  left: 5%;\n  color: #fff;\n}\n\n.zmiti-index-main-ui .zmiti-poster {\n  z-index: 100;\n  background: #000;\n  display: -webkit-box;\n  -webkit-box-align: center;\n  -webkit-box-pack: center;\n  -webkit-box-orient: horizontal;\n}\n\n.zmiti-index-main-ui .zmiti-poster img {\n  width: auto;\n  max-width: 100%;\n  max-height: 100%;\n  height: 100%;\n  display: block;\n}\n\n.zmiti-index-main-ui .zmiti-create-btn {\n  margin: 80px auto;\n  width: 180px;\n  height: 60px;\n  line-height: 60px;\n  color: #fff;\n  text-align: center;\n  border-radius: 10px;\n  background: blue;\n}\n\n.zmiti-index-main-ui .zmiti-start {\n  position: absolute;\n  bottom: 100px;\n  width: 100px;\n  height: 100px;\n  border-radius: 50%;\n  text-align: center;\n  background: #ccc;\n  line-height: 100px;\n  left: 50%;\n  margin-left: -50px;\n  z-index: 10;\n  -webkit-transition: 0.1s;\n  transition: 0.1s;\n}\n\n.zmiti-index-main-ui .zmiti-start.active {\n  -webkit-transform: scale(0.95);\n  transform: scale(0.95);\n}\n\n.zmiti-index-main-ui .zmiti-canvas {\n  position: absolute;\n  left: 0;\n  bottom: 0;\n}\n\n.zmiti-index-main-ui .zmiti-btns {\n  display: -webkit-box;\n  -webkit-box-align: center;\n  -webkit-box-pack: center;\n  -webkit-box-orient: horizontal;\n}\n\n.zmiti-index-main-ui .zmiti-btns div {\n  width: 140px;\n  height: 60px;\n  background: #ccc;\n  text-align: center;\n  line-height: 60px;\n  margin: 0 20px;\n}\n", ""]);
+	exports.push([module.id, ".lt-full {\r\n  width: 100%;\r\n  height: 100%;\r\n  position: absolute;\r\n  left: 0;\r\n  top: 0; }\r\n\r\n.zmiti-text-overflow {\r\n  overflow: hidden;\r\n  white-space: nowrap;\r\n  word-break: break-all;\r\n  text-overflow: ellipsis;\r\n  -webkit-text-overflow: ellipsis; }\r\n\r\n.zmiti-play {\r\n  width: .8rem;\r\n  height: .8rem;\r\n  border-radius: 50%;\r\n  position: fixed;\r\n  z-index: 1223000 !important;\r\n  right: .5rem;\r\n  top: .5rem; }\r\n  .zmiti-play.rotate {\r\n    -webkit-animation: rotate 5s linear infinite;\r\n    animation: rotate 5s linear infinite; }\r\n\r\n@-webkit-keyframes rotate {\r\n  to {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg); } }\r\n.zmiti-index-main-ui {\r\n  overflow: hidden;\r\n  width: 750px !important;\r\n  background: #4081dd;\r\n  position: relative; }\r\n  .zmiti-index-main-ui .zmiti-index-img {\r\n    position: absolute;\r\n    width: 100%;\r\n    z-index: 1000; }\r\n  .zmiti-index-main-ui .zmiti-index-mask {\r\n    background: rgba(0, 0, 0, 0.6); }\r\n  .zmiti-index-main-ui .zmiti-img {\r\n    position: relative;\r\n    z-index: 20; }\r\n  .zmiti-index-main-ui .zmiti-tip {\r\n    position: absolute;\r\n    width: 100%;\r\n    text-align: center; }\r\n  .zmiti-index-main-ui .zmiti-wish-text {\r\n    position: absolute;\r\n    z-index: 30;\r\n    top: 60px;\r\n    width: 90%;\r\n    left: 5%;\r\n    color: #fff; }\r\n  .zmiti-index-main-ui .zmiti-poster {\r\n    z-index: 100;\r\n    background: #000;\r\n    display: -webkit-box;\r\n    -webkit-box-align: center;\r\n    -webkit-box-pack: center;\r\n    -webkit-box-orient: horizontal; }\r\n    .zmiti-index-main-ui .zmiti-poster img {\r\n      width: auto;\r\n      max-width: 100%;\r\n      max-height: 100%;\r\n      height: 100%;\r\n      display: block; }\r\n  .zmiti-index-main-ui .zmiti-create-btn {\r\n    margin: 80px auto;\r\n    width: 180px;\r\n    height: 60px;\r\n    line-height: 60px;\r\n    color: #fff;\r\n    text-align: center;\r\n    border-radius: 10px;\r\n    background: blue; }\r\n  .zmiti-index-main-ui .zmiti-start {\r\n    position: absolute;\r\n    bottom: 100px;\r\n    width: 100px;\r\n    height: 100px;\r\n    border-radius: 50%;\r\n    text-align: center;\r\n    background: #ccc;\r\n    line-height: 100px;\r\n    left: 50%;\r\n    margin-left: -50px;\r\n    z-index: 10;\r\n    -webkit-transition: 0.1s;\r\n    transition: 0.1s; }\r\n    .zmiti-index-main-ui .zmiti-start.active {\r\n      -webkit-transform: scale(0.95);\r\n      transform: scale(0.95); }\r\n  .zmiti-index-main-ui .zmiti-canvas {\r\n    position: absolute;\r\n    left: 0;\r\n    bottom: 0; }\r\n  .zmiti-index-main-ui .zmiti-btns {\r\n    display: -webkit-box;\r\n    -webkit-box-align: center;\r\n    -webkit-box-pack: center;\r\n    -webkit-box-orient: horizontal; }\r\n    .zmiti-index-main-ui .zmiti-btns div {\r\n      width: 140px;\r\n      height: 60px;\r\n      background: #ccc;\r\n      text-align: center;\r\n      line-height: 60px;\r\n      margin: 0 20px; }\r\n\r\n/*# sourceMappingURL=index.css.map */\r\n", ""]);
 
 	// exports
 
@@ -22539,10 +22446,150 @@
 /* 17 */
 /***/ (function(module, exports) {
 
-	module.exports = "\r\n\t<transition name='index'>\r\n\t\t<div ref='page' v-if='show' class=\"lt-full zmiti-index-main-ui \" >\r\n\t\t\t<div class='zmiti-start' :class='{\"active\":showCanvas}'  @touchstart='touchstart' @touchend='touchend' >\r\n\t\t\t\t长按\r\n\t\t\t</div>\r\n\t\t\t<img class='zmiti-img' v-if='iNow>=0' :src='imgs[(imgDone?\"img\":\"gif\")+indexArr[iNow]]'/>\r\n\t\t\t<div  class='zmiti-tip' style='color:#fff;text-align:center;top:60px'>长按选择图片</div>\r\n\t\t\t<div v-if='imgDone && !result.wish' style='color:#fff;text-align:center'>长按选择祝福语</div>\r\n\t\t\t<div class='zmiti-wish-text' v-if='imgDone'>\r\n\t\t\t\t{{wishes[textIndexArr[textInow]].wish}}\r\n\t\t\t</div>\r\n\r\n\t\t\t<div class='zmiti-btns' v-if='showBtns'>\r\n\t\t\t\t<div v-tap='[cancel]'>取消</div>\r\n\t\t\t\t<div v-tap='[sure]'>确定</div>\r\n\t\t\t</div>\r\n\r\n\t\t\t<div class='zmiti-create-btn' v-if='result.wish' v-tap='[create]'>生成海报</div>\r\n\r\n\t\t\t<canvas v-show='showCanvas' :width=\"viewW\" height=\"500\" ref='canvas' class='zmiti-canvas'>\r\n\r\n\t\t\t</canvas>\r\n\r\n\t\t\t<div class='lt-full zmiti-poster' v-if='createImg'>\r\n\t\t\t\t<img :src=\"imgs.wish\" alt=\"\">\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</transition>\r\n";
+	module.exports = "\r\n\t<transition name='index'>\r\n\t\t<div ref='page' v-if='show' class=\"lt-full zmiti-index-main-ui \" >\r\n\t\t\t<img v-if='showImg' :src=\"imgs.index\" alt=\"\" class=\"zmiti-index-img\"  v-tap='[playVideo]'>\r\n\t\t\t<video v-show='!showImg' ref='video1' width=\"100%\"  :src=\"indexVideo\"></video>\r\n\t\t\t<div class='zmiti-index-mask lt-full'>\r\n\t\t\t\t<div>说明文字说明文字</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</transition>\r\n";
 
 /***/ }),
 /* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(19)
+	__vue_template__ = __webpack_require__(22)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "E:\\project\\newyear2019\\components\\loading\\index.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	// <template>
+	// 	<transition name='loading'>
+	// 		<div ref='page'  class="lt-full zmiti-loading " v-if='show' >
+	// 			<div class='zmiti-loading-bar'>
+	// 				<img :src="imgs.loading" alt="">
+	// 				<div>
+	// 					<span :style='{width:width+"px"}'></span>
+	// 					<div></div>
+	// 					<div></div>
+	// 					<div></div>
+	// 					<div></div>
+	// 					<div></div>
+	// 					<div></div>
+	// 					<div></div>
+	// 					<div></div>
+	// 					<div></div>
+	// 					<div></div>
+	// 					<div></div>
+	// 				</div>
+	// 			</div>
+	// 		</div>
+	// 	</transition>
+	// </template>
+	//
+	// <script>
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+		value: true
+	});
+
+	__webpack_require__(20);
+
+	var _libAssetsJs = __webpack_require__(13);
+
+	var _libUtil = __webpack_require__(14);
+
+	exports['default'] = {
+		props: ['width', 'obserable'],
+		name: 'zmitiindex',
+		data: function data() {
+			return {
+				imgs: _libAssetsJs.imgs,
+				viewW: Math.min(window.innerWidth, 750),
+				viewH: window.innerHeight,
+				show: true
+			};
+		},
+		components: {},
+
+		methods: {
+
+			imgStart: function imgStart(e) {
+				e.preventDefault();
+			}
+		},
+		mounted: function mounted() {
+			var _this = this;
+
+			this.obserable.on('hideloading', function () {
+				_this.show = false;
+			});
+		}
+	};
+
+	// </script>
+	module.exports = exports['default'];
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(21);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../../node_modules/css-loader/index.js!./index.css", function() {
+				var newContent = require("!!../../node_modules/css-loader/index.js!./index.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".lt-full {\r\n  width: 100%;\r\n  height: 100%;\r\n  position: absolute;\r\n  left: 0;\r\n  top: 0; }\r\n\r\n.zmiti-text-overflow {\r\n  overflow: hidden;\r\n  white-space: nowrap;\r\n  word-break: break-all;\r\n  text-overflow: ellipsis;\r\n  -webkit-text-overflow: ellipsis; }\r\n\r\n.zmiti-play {\r\n  width: .8rem;\r\n  height: .8rem;\r\n  border-radius: 50%;\r\n  position: fixed;\r\n  z-index: 1223000 !important;\r\n  right: .5rem;\r\n  top: .5rem; }\r\n  .zmiti-play.rotate {\r\n    -webkit-animation: rotate 5s linear infinite;\r\n    animation: rotate 5s linear infinite; }\r\n\r\n@-webkit-keyframes rotate {\r\n  to {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg); } }\r\n.zmiti-loading {\r\n  overflow: hidden;\r\n  width: 750px !important;\r\n  left: 50% !important;\r\n  margin-left: -375px;\r\n  background: #d1432f;\r\n  display: -webkit-box;\r\n  -webkit-box-align: center;\r\n  -webkit-box-pack: center;\r\n  -webkit-box-orient: horizontal; }\r\n  .zmiti-loading.loading-enter-active, .zmiti-loading.loading-leave-active {\r\n    -webkit-transition: opacity 0;\r\n    transition: opacity 0; }\r\n  .zmiti-loading.loading-enter, .zmiti-loading.loading-leave-to {\r\n    opacity: 0; }\r\n  .zmiti-loading .zmiti-loading-bar {\r\n    -webkit-transform: scale(0.8);\r\n    transform: scale(0.8);\r\n    width: 400px; }\r\n    .zmiti-loading .zmiti-loading-bar > div {\r\n      width: 100%;\r\n      height: 40px;\r\n      margin-top: -50px;\r\n      border-radius: 10px;\r\n      border: 4px solid #52701e;\r\n      background: #dbeebb;\r\n      position: relative;\r\n      box-sizing: border-box;\r\n      overflow: hidden;\r\n      display: -webkit-box;\r\n      -webkit-box-align: center;\r\n      -webkit-box-pack: center;\r\n      -webkit-box-orient: horizontal;\r\n      -webkit-box-pack: justify; }\r\n      .zmiti-loading .zmiti-loading-bar > div div {\r\n        width: 10px;\r\n        height: 10px;\r\n        background: #b8d193;\r\n        border-radius: 50%; }\r\n      .zmiti-loading .zmiti-loading-bar > div span {\r\n        position: absolute;\r\n        width: 0;\r\n        height: 40px;\r\n        top: -4px;\r\n        left: -4px;\r\n        border: 4px solid #52701e;\r\n        box-sizing: border-box;\r\n        background: #f2edc7;\r\n        border-radius: 10px; }\r\n    .zmiti-loading .zmiti-loading-bar img {\r\n      width: auto; }\r\n\r\n.zmiti-book1,\r\n.zmiti-book2 {\r\n  position: absolute;\r\n  -webkit-transition: 1s 0.1s;\r\n  transition: 1s 0.1s; }\r\n  .zmiti-book1.active,\r\n  .zmiti-book2.active {\r\n    -webkit-transform: translate3d(0, -80px, 0);\r\n    transform: translate3d(0, -80px, 0); }\r\n\r\n.zmiti-book2 {\r\n  bottom: 0;\r\n  left: 0; }\r\n  .zmiti-book2.active {\r\n    -webkit-transform: translate3d(0, 80px, 0);\r\n    transform: translate3d(0, 80px, 0); }\r\n\r\n/*# sourceMappingURL=index.css.map */\r\n", ""]);
+
+	// exports
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+	module.exports = "\r\n\t<transition name='loading'>\r\n\t\t<div ref='page'  class=\"lt-full zmiti-loading \" v-if='show' >\r\n\t\t\t<div class='zmiti-loading-bar'>\r\n\t\t\t\t<img :src=\"imgs.loading\" alt=\"\">\r\n\t\t\t\t<div>\r\n\t\t\t\t\t<span :style='{width:width+\"px\"}'></span>\r\n\t\t\t\t\t<div></div>\r\n\t\t\t\t\t<div></div>\r\n\t\t\t\t\t<div></div>\r\n\t\t\t\t\t<div></div>\r\n\t\t\t\t\t<div></div>\r\n\t\t\t\t\t<div></div>\r\n\t\t\t\t\t<div></div>\r\n\t\t\t\t\t<div></div>\r\n\t\t\t\t\t<div></div>\r\n\t\t\t\t\t<div></div>\r\n\t\t\t\t\t<div></div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</transition>\r\n";
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -22606,7 +22653,7 @@
 	module.exports = exports["default"];
 
 /***/ }),
-/* 19 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -22721,13 +22768,13 @@
 	});
 
 /***/ }),
-/* 20 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * vue-tap.js v1.2.3
+	 * vue-tap.js v1.2.5
 	 * By 雾空 https://github.com/weijhfly/vue-tap
-	 * Time:2018/1/18
+	 * Date:2018/1/18
 	*/
 	;(function (factory) {
 		if (true) {

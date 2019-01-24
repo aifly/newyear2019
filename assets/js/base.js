@@ -3,6 +3,8 @@
 	point: './assets/images/point.png',
 	wish: './assets/images/wish.jpg',
   gif1:'./assets/images/1.gif',
+  index:"./assets/images/index.jpg",
+  loading:'./assets/images/loading.gif',
   gif2:'./assets/images/2.gif',
   gif3:'./assets/images/3.gif',
   gif4:'./assets/images/4.gif',
@@ -21,6 +23,8 @@
   img8: './assets/images/8.jpg',
   img9: './assets/images/9.jpg',
 }
+
+
  
  
 var arr = [];
@@ -32,6 +36,7 @@ for (var attr in imgs) {
 
 
 window.config = {
+  indexvideo:'./assets/video/index.mp4',
   baseUrl: "https://xlive.xinhuaapp.com",
   secretKey: "e9469538b0623783f38c585821459454",
   wishes:[
