@@ -2,46 +2,101 @@
 
 $baseColor: #fcffb4;
 $viewW: 750px;
-$bgColor: #4081dd;
+$bgColor: #f23426;
 
 .zmiti-index-main-ui {
     overflow: hidden;
     width: $viewW !important;
-    background:$bgColor;
+
     @include pos(r);
-    .zmiti-index-img{
+
+    .zmiti-index-img,
+    video {
         @include pos(a);
+
+        left: 50%;
+        top: 50%;
+
+        @include transform(translate3d(-50%, -50%, 0));
+
         width: 100%;
-        z-index: 1000;
+        height: auto;
+
+        //max-height: 100vh;
+        //max-width: 100vw;
+        z-index: 100;
+    }
+    .zmiti-index-img{
+        &.active{
+            max-height: 100vh;
+            width: auto;
+            height: auto;
+            max-width: 100vw;
+        }
+    }
+    
+
+    .zmiti-index-mask {
+        background:#f23426;
+        color: #fff;
+        z-index: 101;
+        text-align: center;
+        &>img{
+
+            width: auto;
+            height: auto;
+            max-width: 100vw;
+            max-height:100vh;
+        }
+        
+        .zmiti-index-mask-nickname{
+            @include pos(a);
+            width: 100%;
+            top: 24vh;
+            font-size:34px;
+            color:#ffd451;
+        }
+
+        .zmiti-open{
+            @include pos(a);
+            z-index: 10;
+            bottom: 10vh;
+            width:150px;
+            left: 50%;
+            margin-left: -75px;
+        }
     }
 
-    .zmiti-index-mask{
-        background:rgba(0,0,0,.6);
-    }
-
-    .zmiti-img{
+    .zmiti-img {
         @include pos(r);
+
         z-index: 20;
     }
-    .zmiti-tip{
+
+    .zmiti-tip {
         @include pos(a);
+
         width: 100%;
         text-align: center;
     }
-    .zmiti-wish-text{
+
+    .zmiti-wish-text {
         @include pos(a);
+
         z-index: 30;
         top: 60px;
         width: 90%;
-        left: 5%;;
-        color:#fff;
-
+        left: 5%;
+        color: #fff;
     }
-    .zmiti-poster{
+
+    .zmiti-poster {
         z-index: 100;
         background: #000;
+
         @include displayBox(horizontal);
-        img{
+
+        img {
             width: auto;
             max-width: 100%;
             max-height: 100%;
@@ -49,52 +104,174 @@ $bgColor: #4081dd;
             display: block;
         }
     }
-    .zmiti-create-btn{
+
+    .zmiti-create-btn {
         margin: 80px auto;
         width: 180px;
         height: 60px;
         line-height: 60px;
-        color:#fff;
+        color: #fff;
         text-align: center;
+
         @include br(10px);
-        background:blue;
+
+        background: blue;
     }
-    .zmiti-start{
+
+    .zmiti-start {
         @include pos(a);
+
         bottom: 100px;
         width: 100px;
         height: 100px;
-        @include br();
+
+        @include br;
+
         text-align: center;
-        background:#ccc;
+        background: #ccc;
         line-height: 100px;
         left: 50%;
         margin-left: -50px;
         z-index: 10;
-        @include transition(.1s);
-        &.active{
+
+        @include transition(0.1s);
+
+        &.active {
             @include transform(scale(0.95));
         }
     }
-    .zmiti-canvas{
+
+    .zmiti-canvas {
         @include pos(a);
-        left: 0;;
-        bottom:0;
+
+        left: 0;
+        bottom: 0;
     }
 
-    .zmiti-btns{
+    .zmiti-btns {
         @include displayBox(horizontal);
-        div{
-            width: 140px;
-            height: 60px;
-            background:#ccc;
+        @include pos(a);
+        bottom: 100px;
+        left: 50%;
+        color:#ffd451;
+        @include transform(translate3d(-50%,0,0));
+        z-index: 103;
+        &>div {
+            width: 120px;
+            height: 120px;
             text-align: center;
-            line-height: 60px;;
-            margin: 0 20px;
-
+            line-height: 60px;
+            margin: 0 50px;
+            font-size:24px;
         }
     }
- 
+    .zmiti-share{
+        bottom: 60px;
+        &>div {
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            line-height: 60px;
+            margin: 0 50px;
+            font-size: 24px;
+        }
+    }
+
+    .zmiti-cacheimg{
+        @include transform(scale(.74));
+        @include transformOrigin(center 10%);
+        
+        &>div{
+            @include pos(a);
+            left: -40px;
+            width: 30px;
+            bottom:0;
+            color:#ffd451;
+        }
+    }
+
+    .zmiti-prize{
+        @include displayBox(vertical);
+        color:#fcffb4;
+        .zmiti-input-tip{
+            text-align: left;
+            width: 90%;
+            margin-bottom: 20px;
+            font-size:32px;
+        }
+        .zmiti-prize-img{
+            width: 90%;
+            margin-top: 20px;
+        }
+        .zmiti-input{
+            border:1px solid #fff;
+            width: 90%;
+            padding: 10px 0;
+            img{
+                width: 100px;
+                margin-left: 4%;
+            }
+            input{
+                outline: none;
+                height: 60px;
+                color:#fcffb4;
+                background:transparent;
+                width: 80%;
+                padding-left: 20px;
+                box-sizing: border-box;
+                font-size:30px;
+                border:none;
+            }
+        }
+    }
+
+    .zmiti-arrow{
+        @include pos(a);
+        width: 500px;
+        right:30px;;
+        top: 10px;
+    }
+    .zmiti-createimg{
+        background:#000;
+    }
+
+    .zmiti-mask{
+        @include pos(a);
+        z-index: 1002;
+        background:rgba(0,0,0,.8);
+
+    }
+}
+.zmiti-qrcode{
+    @include pos(a);
+    $size:140px;
+    width: $size;
+    height: $size;
+    bottom: 7vh;
+    left: 50%;
+    margin-left: -$size/2;
+    z-index: 100;
 }
 
 
+.zmiti-nickname {
+        @include pos(a);
+        z-index: 103;
+        bottom:23vh;
+        left: 50%;
+
+        color:#fff;
+        
+        @include transform(translate3d(-50%, 0, 0));
+    }
+
+@media all and (min-height:1110px){
+    .zmiti-nickname{
+        bottom: 23.5vh;
+    }
+}
+@media all and (min-height:1448px){
+    .zmiti-nickname{
+        bottom: 26vh;
+    }
+}

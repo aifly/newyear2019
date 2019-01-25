@@ -144,12 +144,14 @@ var zmitiUtil = {
 		 }
 
 		 //alert(paraString);
-		 var key = '4headingur1',
-			 key1 = '4nnickname31';
+		 var key = '11headingur1',
+			 key1 = '11nickname31';
 
 			var nickname = this.getQueryString('nickname');
 			var headimgurl = this.getQueryString('headimgurl');
+
 		if (nickname || window.localStorage.getItem(key1)) {
+			
 			if (!window.localStorage.getItem(key1)){
 	
 				window.localStorage.setItem(key, headimgurl);
@@ -161,6 +163,14 @@ var zmitiUtil = {
 				window.nickname = window.localStorage.getItem(key1);
 				window.headimgurl = window.localStorage.getItem(key);
 			}
+			
+			obserable.trigger({
+				type: "setUserInfo",
+				data: {
+					nickname: decodeURI(window.nickname),
+					headimgurl
+				}
+			})
 			setTimeout(()=>{
 				//
 				wxHandlercallback('', decodeURI(window.nickname) + document.title, document.title);
@@ -169,9 +179,11 @@ var zmitiUtil = {
 		else{
 			 if (!this.isWeiXin()) {
 			 	return;
-			 } 
+			 }
 			var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + wxappid + '&redirect_uri=https://openapi.zhongguowangshi.com/wxHandler.ashx?action=getWeixinUserInfo&response_type=code&scope=snsapi_userinfo&state=XHSAh5A' + window.h5name + 'AindexAhtml#wechat_redirect'
+			alert(url);
 			window.location.href = url;
+			
 		 }
 
 		 var re = /^[\u4e00-\u9fa5]{0,}$/;
