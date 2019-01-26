@@ -29,9 +29,16 @@ $bgColor: #d1432f;
     .zmiti-loading-bar {
         @include transform(scale(.8));
         width: 400px;
+        margin-top: -40px;
+        section {
+            color: $color;
+            text-align: center;
+            font-size:32px;
+            margin-top: 20px;
+        }
         & > div {
             width: 100%;
-            height: 40px;
+            height: 20px;
             margin-top: -50px;
 
             @include br(10px);
@@ -47,7 +54,7 @@ $bgColor: #d1432f;
             
             @include displayBox(horizontal);
             -webkit-box-pack: justify;
-
+            
             div{
                 width: 10px;
                 height: 10px;
@@ -59,7 +66,7 @@ $bgColor: #d1432f;
                 @include pos(a);
 
                 width: 0;
-                height: 40px;
+                height: 20px;
                 top: -4px;
                 left: -4px;
                 border:4px solid #52701e;

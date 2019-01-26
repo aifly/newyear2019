@@ -17,6 +17,7 @@
 					<div></div>
 					<div></div>
 				</div>
+				<section>{{parseInt(width/4)}}%</section>
 			</div>
 		</div>
 	</transition>

@@ -181,7 +181,6 @@ var zmitiUtil = {
 			 	return;
 			 }
 			var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + wxappid + '&redirect_uri=https://openapi.zhongguowangshi.com/wxHandler.ashx?action=getWeixinUserInfo&response_type=code&scope=snsapi_userinfo&state=XHSAh5A' + window.h5name + 'AindexAhtml#wechat_redirect'
-			alert(url);
 			window.location.href = url;
 			
 		 }

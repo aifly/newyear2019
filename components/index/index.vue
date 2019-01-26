@@ -2,7 +2,8 @@
 	<transition name='index'>
 		<div v-if='show' class="lt-full zmiti-index-main-ui " :style='{background:"url("+imgs.createBg+") no-repeat center",backgroundSize:"cover"}'>
 			<div v-show='!cacheImg' ref='page' class='lt-full' style='background:#c51a00;'>
-				<img v-show='showImg' :src="bg" alt="" class="zmiti-index-img" :class="{'active':currentStep>1}"  v-tap='[playVideo]'>
+				<img :src="bg" alt="" class="zmiti-index-img" :class="{'active':currentStep>1}"  v-tap='[playVideo]'>
+				<img :src="imgs.player" v-if='showPlayer' class='zmiti-player' alt="">
 				<video x-webkit-airplay="true" webkit-playsinline="true" playsinline=""
 				x5-video-player-type="h5" x5-video-player-fullscreen="true" 
 				v-show='showVideo1' ref='video1'  :src="indexVideo"></video>
@@ -23,7 +24,7 @@
 						<div>确定</div>
 					</div>
 				</div>
-				<div class='zmiti-nickname' v-if='showNickname' @touchstart='touchstart' @touchend='touchend'>
+				<div class='zmiti-nickname' v-if='showNickname' >
 					<svg v-if='false' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'>
 						<defs>
 							<path id='p1' d="M 0 155 q 130 -160 300 0" stroke="blue" stroke-width="5" fill="none" />
@@ -33,6 +34,10 @@
 						</text>
 					</svg>
 					{{nickname||'新华社网友'}}
+				</div>
+				<div class='zmiti-change-btn' v-if='showChangeBtn' @touchstart='touchstart' @touchend='touchend'>
+					<img :src="imgs.okBtn" alt="" @touchstart='imgStart'>
+					<div>长按替换对联</div>
 				</div>
 				<div class='zmiti-qrcode' v-if='showQrcode'>
 					<img :src="imgs.qrcode" alt="">
@@ -54,6 +59,14 @@
 						<img :src="imgs.okBtn" alt="">
 						<div>抽奖</div>
 					</div>
+				</div>
+				<div class='zmiti-team-btn' @touchend='showTeamPage = true'>
+					<img :src="imgs.teamBtn" alt="">
+				</div>
+			</div>
+			<div v-if='showTeamPage'  class='zmiti-team-page lt-full' :style='{background:"url("+imgs.team+") no-repeat center",backgroundSize:"cover"}'>
+				<div @touchend='showTeamPage = false'>
+					<img :src="imgs.back" alt="">
 				</div>
 			</div>
 			<div v-if='showPrize' :style='{background:"url("+imgs.createBg+") no-repeat center",backgroundSize:"cover"}' class='lt-full zmiti-createimg zmiti-prize' >
@@ -109,6 +122,7 @@
 				mobile:'',
 				wishes:window.config.wishes,
 				show:true,
+				showChangeBtn:false,
 				start:false,
 				showIndex:false,
 				showShareMask:false,
@@ -124,11 +138,13 @@
 				iNow:-1,
 				showBitmapBtns:false,
 				createImg:'',
+				showTeamPage:false,
 				successMsg:'',
 				result:{
 					img:'',
 					wish:''
-				}
+				},
+				showPlayer:true,
 			}
 		},
 		components:{
@@ -239,6 +255,7 @@
 
 				video.addEventListener('play',()=>{
 					///this.showImg = false;
+					this.showPlayer = false;
 				})
 
 				this.showVideo1 = true;
@@ -250,8 +267,11 @@
 						this.showMask = true;
 					}else if(e.target.currentSrc.indexOf(window.config.indexvideo1.replace('./',''))>-1){
 						this.bg = imgs.index2;
-						this.showVideo1 = false;//播放完成以后，隐藏视频。
+						setTimeout(() => {
+							this.showVideo1 = false;//播放完成以后，隐藏视频。
+						}, 200);
 						this.showNickname = true;
+						this.showChangeBtn = true;
 						
 					}
 					
@@ -288,21 +308,61 @@
 					this.iNow %= this.len;
 					this.bg = imgs['gif'+this.indexArr[this.iNow]];
 				},100);
+				return false;
 			},
 			touchend(){
 
 				clearInterval(this.timer);
 				this.showBitmapBtns = true;
 				this.showCanvas = false;
-				
+				this.showChangeBtn = false;
 			},
 			
 			end(){
 				this.showIndex = true;
 			},
+
+			shake(){
+				 if (window.DeviceMotionEvent) {
+					   window.addEventListener('devicemotion',deviceMotionHandler,false);
+ 				}
+				var SHAKE_THRESHOLD = 4000;
+				var last_update = 0;
+				var s = this;
+				var x, y, z, last_x = 0, last_y = 0, last_z = 0;
+				function deviceMotionHandler(eventData) {
+						var acceleration =eventData.accelerationIncludingGravity;
+						var curTime = new Date().getTime();
+						if ((curTime-last_update)> 10) {
+							var diffTime = curTime -last_update;
+							last_update = curTime;
+							x = acceleration.x;
+							y = acceleration.y;
+							z = acceleration.z;
+							var speed = Math.abs(x +y + z - last_x - last_y - last_z) / diffTime * 10000;
+							if (speed > SHAKE_THRESHOLD) {
+								if(s.iNow <= -1){
+									s.iNow = 0;
+								}
+								if(s.iNow === 0){
+									s.indexArr.sort(()=>{
+										return Math.random()>.5;
+									});
+								}
+								s.iNow++;
+								s.iNow %= s.len;
+								s.bg = imgs['gif'+s.indexArr[s.iNow]];
+							}
+							last_x = x;
+							last_y = y;
+							last_z = z;
+						}
+				}
+			}
 		},
 		mounted(){
 			this.setSize();
+			this.shake()
 			this.indexArr = [];
 			for(var i =1;i<this.len+1;i++){
 				this.indexArr[i-1]= i;
