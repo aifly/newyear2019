@@ -180,6 +180,11 @@
 				obserable.trigger({
 					type: 'hideloading'
 				});
+				setTimeout(function () {
+					obserable.trigger({
+						type: 'initIndex'
+					});
+				}, 1000);
 				s.show = true;
 				s.loaded = true;
 			});
@@ -11984,18 +11989,21 @@
 	// 	<transition name='index'>
 	// 		<div v-if='show' class="lt-full zmiti-index-main-ui " :style='{background:"url("+imgs.createBg+") no-repeat center",backgroundSize:"cover"}'>
 	// 			<div v-show='!cacheImg' ref='page' class='lt-full' style='background:#c51a00;'>
-	// 				<img :src="bg" alt="" class="zmiti-index-img" :class="{'active':currentStep>1}"  v-tap='[playVideo]'>
-	// 				<img :src="imgs.player" v-if='showPlayer' class='zmiti-player' alt="">
+	// 				<img class='zmiti-index-img' @touchstart='playVideo' @touchend='playVideo' :src="bg"  alt=""  :class="{'active':showNickname}" >
+	// 				<img @touchstart='playVideo' @touchend='playVideo' :src="imgs.player" v-if='showPlayer' class='zmiti-player' alt="">
 	// 				<video x-webkit-airplay="true" webkit-playsinline="true" playsinline=""
+	// 				@touchstart='playVideo' @touchend='playVideo'
 	// 				x5-video-player-type="h5" x5-video-player-fullscreen="true"
-	// 				v-show='showVideo1' ref='video1'  :src="indexVideo"></video>
-	// 				<div class='zmiti-index-mask lt-full' v-show='showMask'>
-	// 					<div class='zmiti-index-mask-nickname'>{{nickname||'新华社网友'}}</div>
-	// 					<img :src="imgs.mask" alt="">
-	// 					<div class='zmiti-open' v-tap='[next]'>
-	// 						<img :src="imgs.open" alt="">
+	// 				 ref='video1' v-show="showVideo1"  :src="indexVideo"></video>
+	// 				<transition name='mask'>
+	// 					<div class='zmiti-index-mask lt-full' v-if='showMask'>
+	// 						<div class='zmiti-index-mask-nickname'>{{nickname||'新华社网友'}}</div>
+	// 						<img :src="imgs.mask" alt="">
+	// 						<div class='zmiti-open' v-tap='[next]'>
+	// 							<img :src="imgs.open" alt="">
+	// 						</div>
 	// 					</div>
-	// 				</div>
+	// 				</transition>
 	// 				<div v-if='showBitmapBtns' class='zmiti-btns'>
 	// 					<div v-tap='[restart]'>
 	// 						<img :src="imgs.cancelBtn" alt="">
@@ -12026,7 +12034,7 @@
 	// 				</div>
 	// 			</div>
 	// 			<div v-if='cacheImg && !showPrize' :style='{background:"url("+imgs.createBg+") no-repeat center",backgroundSize:"cover"}' class='lt-full zmiti-createimg' >
-	// 				<div class='zmiti-cacheimg' >
+	// 				<div class='zmiti-cacheimg' :class='createClass' >
 	// 					<img :src="cacheImg" alt="" >
 	// 					<div>
 	// 						长按保存图片
@@ -12106,8 +12114,9 @@
 			return {
 				imgs: _libAssetsJs.imgs,
 				errorMsg: "",
+				createClass: "",
 				bg: _libAssetsJs.imgs.index,
-				showVideo1: false,
+				showVideo1: true,
 				secretKey: "e9469538b0623783f38c585821459454",
 				host: "https://xlive.xinhuaapp.com", //测试域名：https://testxlive.xinhuaapp.com
 				showMask: false,
@@ -12193,6 +12202,7 @@
 					setTimeout(function () {
 						s.successMsg = '';
 						s.errorMsg = '';
+						s.showPrize = false;
 					}, 2000);
 				});
 			},
@@ -12203,13 +12213,14 @@
 				this.showMask = false;
 				this.showVideo1 = true;
 				this.showImg = true;
-				this.indexVideo = window.config.indexvideo1;
+				//this.indexVideo = window.config.indexvideo1;	
 				setTimeout(function () {
 					_this2.$refs['video1'].play();
 				}, 1);
 			},
 			restart: function restart() {
-				window.location.href = window.location.href;
+				this.showBitmapBtns = false;
+				this.showChangeBtn = true;
 			},
 			choose: function choose() {
 				this.bg = _libAssetsJs.imgs['img' + this.indexArr[this.iNow]];
@@ -12241,6 +12252,10 @@
 							//s.mergeImg = '';
 							//s.createImg = src;
 							s.cacheImg = src;
+
+							setTimeout(function () {
+								s.createClass = 'active';
+							}, 20);
 						},
 						width: dom.clientWidth,
 						height: dom.clientHeight
@@ -12258,27 +12273,37 @@
 				this.video = video;
 				video.play();
 
+				video.addEventListener('timeupdate', function () {
+					if (video.currentTime > 6 && _this4.currentStep === 0) {
+						_this4.currentStep++;
+						video.pause();
+						setTimeout(function () {
+							_this4.bg = _libAssetsJs.imgs.index1;
+							_this4.showMask = true;
+						}, 2000);
+					}
+				});
+
+				video.addEventListener('canplaythrough', function () {
+					//this.showPlayer = false;
+
+				});
+
 				video.addEventListener('play', function () {
-					///this.showImg = false;
 					_this4.showPlayer = false;
+					///this.showImg = false;
 				});
 
 				this.showVideo1 = true;
 
 				video.addEventListener('ended', function (e) {
-					_this4.currentStep++;
-					if (e.target.currentSrc.indexOf(window.config.indexvideo.replace('./', '')) > -1) {
-						//播放的是第一个视频
-						_this4.bg = _libAssetsJs.imgs.index1;
-						_this4.showMask = true;
-					} else if (e.target.currentSrc.indexOf(window.config.indexvideo1.replace('./', '')) > -1) {
-						_this4.bg = _libAssetsJs.imgs.index2;
-						setTimeout(function () {
-							_this4.showVideo1 = false; //播放完成以后，隐藏视频。
-						}, 200);
-						_this4.showNickname = true;
-						_this4.showChangeBtn = true;
-					}
+
+					_this4.bg = _libAssetsJs.imgs.index2;
+					setTimeout(function () {
+						_this4.showVideo1 = false; //播放完成以后，隐藏视频。
+					}, 200);
+					_this4.showNickname = true;
+					_this4.showChangeBtn = true;
 				});
 			},
 
@@ -12312,16 +12337,22 @@
 					}
 					_this5.iNow++;
 					_this5.iNow %= _this5.len;
-					_this5.bg = _libAssetsJs.imgs['gif' + _this5.indexArr[_this5.iNow]];
-				}, 100);
+					_this5.bg = _libAssetsJs.imgs['img' + _this5.indexArr[_this5.iNow]];
+				}, 200);
 				return false;
 			},
-			touchend: function touchend() {
+			touchend: function touchend(e) {
+				var _this6 = this;
 
-				clearInterval(this.timer);
-				this.showBitmapBtns = true;
-				this.showCanvas = false;
-				this.showChangeBtn = false;
+				setTimeout(function () {
+					clearInterval(_this6.timer);
+					if (e.target.className === 'zmiti-change-btn' || e.target.parentNode.className === 'zmiti-change-btn') {
+						_this6.showChangeBtn = false;
+						_this6.showBitmapBtns = true;
+						_this6.showCanvas = false;
+						_this6.bg = _libAssetsJs.imgs['gif' + _this6.indexArr[_this6.iNow]];
+					}
+				}, 1000);
 			},
 
 			end: function end() {
@@ -12362,7 +12393,7 @@
 							}
 							s.iNow++;
 							s.iNow %= s.len;
-							s.bg = _libAssetsJs.imgs['gif' + s.indexArr[s.iNow]];
+							s.bg = _libAssetsJs.imgs['img' + s.indexArr[s.iNow]];
 						}
 						last_x = x;
 						last_y = y;
@@ -12372,9 +12403,15 @@
 			}
 		},
 		mounted: function mounted() {
+			var _this7 = this;
+
 			this.setSize();
 			this.shake();
 			this.indexArr = [];
+
+			this.obserable.on('initIndex', function () {
+				_this7.iNow = 0;
+			});
 			for (var i = 1; i < this.len + 1; i++) {
 				this.indexArr[i - 1] = i;
 			}
@@ -12418,7 +12455,7 @@
 
 
 	// module
-	exports.push([module.id, ".lt-full {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.zmiti-text-overflow {\n  overflow: hidden;\n  white-space: nowrap;\n  word-break: break-all;\n  text-overflow: ellipsis;\n  -webkit-text-overflow: ellipsis;\n}\n\n.zmiti-play {\n  width: .8rem;\n  height: .8rem;\n  border-radius: 50%;\n  position: fixed;\n  z-index: 1223000 !important;\n  right: .5rem;\n  top: .5rem;\n}\n\n.zmiti-play.rotate {\n  -webkit-animation: rotate 5s linear infinite;\n  animation: rotate 5s linear infinite;\n}\n\n@-webkit-keyframes rotate {\n  to {\n    -webkit-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n\n.zmiti-index-main-ui {\n  overflow: hidden;\n  width: 750px !important;\n  position: relative;\n}\n\n.zmiti-index-main-ui .zmiti-index-img,\n.zmiti-index-main-ui video {\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate3d(-50%, -50%, 0);\n  transform: translate3d(-50%, -50%, 0);\n  width: auto;\n  height: auto;\n  max-height: 100vh;\n  max-width: 100vw;\n  z-index: 101;\n}\n\n.zmiti-index-main-ui .zmiti-index-img.active {\n  max-height: 100vh;\n  width: auto;\n  height: auto;\n  max-width: 100vw;\n}\n\n.zmiti-index-main-ui .zmiti-index-mask {\n  background: #f23426;\n  color: #fff;\n  z-index: 101;\n  text-align: center;\n}\n\n.zmiti-index-main-ui .zmiti-index-mask > img {\n  width: auto;\n  height: auto;\n  max-width: 100vw;\n  max-height: 100vh;\n}\n\n.zmiti-index-main-ui .zmiti-index-mask .zmiti-index-mask-nickname {\n  position: absolute;\n  width: 100%;\n  top: 24vh;\n  font-size: 34px;\n  color: #ffd451;\n}\n\n.zmiti-index-main-ui .zmiti-img {\n  position: relative;\n  z-index: 20;\n}\n\n.zmiti-index-main-ui .zmiti-tip {\n  position: absolute;\n  width: 100%;\n  text-align: center;\n}\n\n.zmiti-index-main-ui .zmiti-wish-text {\n  position: absolute;\n  z-index: 30;\n  top: 60px;\n  width: 90%;\n  left: 5%;\n  color: #fff;\n}\n\n.zmiti-index-main-ui .zmiti-poster {\n  z-index: 100;\n  background: #000;\n  display: -webkit-box;\n  -webkit-box-align: center;\n  -webkit-box-pack: center;\n  -webkit-box-orient: horizontal;\n}\n\n.zmiti-index-main-ui .zmiti-poster img {\n  width: auto;\n  max-width: 100%;\n  max-height: 100%;\n  height: 100%;\n  display: block;\n}\n\n.zmiti-index-main-ui .zmiti-create-btn {\n  margin: 80px auto;\n  width: 180px;\n  height: 60px;\n  line-height: 60px;\n  color: #fff;\n  text-align: center;\n  border-radius: 10px;\n  background: blue;\n}\n\n.zmiti-index-main-ui .zmiti-start {\n  position: absolute;\n  bottom: 100px;\n  width: 100px;\n  height: 100px;\n  border-radius: 50%;\n  text-align: center;\n  background: #ccc;\n  line-height: 100px;\n  left: 50%;\n  margin-left: -50px;\n  z-index: 10;\n  -webkit-transition: 0.1s;\n  transition: 0.1s;\n}\n\n.zmiti-index-main-ui .zmiti-start.active {\n  -webkit-transform: scale(0.95);\n  transform: scale(0.95);\n}\n\n.zmiti-index-main-ui .zmiti-canvas {\n  position: absolute;\n  left: 0;\n  bottom: 0;\n}\n\n.zmiti-index-main-ui .zmiti-team-btn {\n  width: 100px;\n  height: 100px;\n  position: absolute;\n  right: 10px;\n  bottom: 10px;\n  z-index: 10;\n}\n\n.zmiti-index-main-ui .zmiti-player {\n  position: absolute;\n  width: 100px;\n  height: 100px;\n  z-index: 203;\n  top: 50%;\n  left: 50%;\n  margin-left: -50px;\n  margin-top: -50px;\n}\n\n.zmiti-index-main-ui .zmiti-team-page {\n  z-index: 1002;\n}\n\n.zmiti-index-main-ui .zmiti-team-page div {\n  position: absolute;\n  width: 100px;\n  height: 100px;\n  right: 10px;\n  bottom: 10px;\n}\n\n.zmiti-index-main-ui .zmiti-btns {\n  display: -webkit-box;\n  -webkit-box-align: center;\n  -webkit-box-pack: center;\n  -webkit-box-orient: horizontal;\n  position: absolute;\n  bottom: 100px;\n  left: 50%;\n  color: #ffd451;\n  -webkit-transform: translate3d(-50%, 0, 0);\n  transform: translate3d(-50%, 0, 0);\n  z-index: 103;\n}\n\n.zmiti-index-main-ui .zmiti-btns > div {\n  width: 120px;\n  height: 120px;\n  text-align: center;\n  line-height: 60px;\n  margin: 0 50px;\n  font-size: 24px;\n}\n\n.zmiti-index-main-ui .zmiti-share {\n  bottom: 60px;\n}\n\n.zmiti-index-main-ui .zmiti-share > div {\n  width: 100px;\n  height: 100px;\n  text-align: center;\n  line-height: 60px;\n  margin: 0 50px;\n  font-size: 24px;\n}\n\n.zmiti-index-main-ui .zmiti-cacheimg {\n  -webkit-transform: scale(0.74);\n  transform: scale(0.74);\n  -webkit-transform-origin: center 10%;\n  transform-origin: center 10%;\n}\n\n.zmiti-index-main-ui .zmiti-cacheimg > div {\n  position: absolute;\n  left: -40px;\n  width: 30px;\n  bottom: 0;\n  color: #ffd451;\n}\n\n.zmiti-index-main-ui .zmiti-prize {\n  display: -webkit-box;\n  -webkit-box-align: center;\n  -webkit-box-pack: center;\n  -webkit-box-orient: vertical;\n  color: #fcffb4;\n}\n\n.zmiti-index-main-ui .zmiti-prize .zmiti-input-tip {\n  text-align: left;\n  width: 90%;\n  margin-bottom: 20px;\n  font-size: 32px;\n}\n\n.zmiti-index-main-ui .zmiti-prize .zmiti-prize-img {\n  width: 90%;\n  margin-top: 20px;\n}\n\n.zmiti-index-main-ui .zmiti-prize .zmiti-input {\n  border: 1px solid #fff;\n  width: 90%;\n  padding: 10px 0;\n}\n\n.zmiti-index-main-ui .zmiti-prize .zmiti-input img {\n  width: 100px;\n  margin-left: 4%;\n}\n\n.zmiti-index-main-ui .zmiti-prize .zmiti-input input {\n  outline: none;\n  height: 60px;\n  color: #fcffb4;\n  background: transparent;\n  width: 80%;\n  padding-left: 20px;\n  box-sizing: border-box;\n  font-size: 30px;\n  border: none;\n}\n\n.zmiti-index-main-ui .zmiti-arrow {\n  position: absolute;\n  width: 500px;\n  right: 30px;\n  top: 10px;\n}\n\n.zmiti-index-main-ui .zmiti-createimg {\n  background: #000;\n}\n\n.zmiti-index-main-ui .zmiti-mask {\n  position: absolute;\n  z-index: 1002;\n  background: rgba(0, 0, 0, 0.8);\n}\n\n.zmiti-qrcode {\n  position: absolute;\n  width: 140px;\n  height: 140px;\n  bottom: 7vh;\n  left: 50%;\n  margin-left: -70px;\n  z-index: 201;\n}\n\n.zmiti-nickname {\n  position: absolute;\n  z-index: 103;\n  bottom: 23vh;\n  left: 50%;\n  color: #fff;\n  -webkit-transform: translate3d(-50%, 0, 0);\n  transform: translate3d(-50%, 0, 0);\n}\n\n.zmiti-open {\n  position: absolute;\n  z-index: 10;\n  bottom: 10vh;\n  width: 150px;\n  left: 50%;\n  margin-left: -75px;\n}\n\n.zmiti-change-btn {\n  position: absolute;\n  bottom: 8vh;\n  z-index: 200;\n  width: 200px;\n  left: 50%;\n  margin-left: -100px;\n  font-size: 24px;\n  color: #ffd451;\n  text-align: center;\n}\n\n.zmiti-change-btn img {\n  width: 100px;\n}\n\n@media all and (min-height: 1110px) {\n  .zmiti-nickname {\n    bottom: 23.5vh;\n  }\n}\n\n@media all and (min-height: 1448px) {\n  .zmiti-nickname {\n    bottom: 26vh;\n  }\n  .zmiti-open {\n    position: absolute;\n    bottom: 15vh;\n  }\n  .zmiti-change-btn {\n    bottom: 10vh;\n  }\n}\n", ""]);
+	exports.push([module.id, ".lt-full {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.zmiti-text-overflow {\n  overflow: hidden;\n  white-space: nowrap;\n  word-break: break-all;\n  text-overflow: ellipsis;\n  -webkit-text-overflow: ellipsis;\n}\n\n.zmiti-play {\n  width: .8rem;\n  height: .8rem;\n  border-radius: 50%;\n  position: fixed;\n  z-index: 1223000 !important;\n  right: .5rem;\n  top: .5rem;\n}\n\n.zmiti-play.rotate {\n  -webkit-animation: rotate 5s linear infinite;\n  animation: rotate 5s linear infinite;\n}\n\n@-webkit-keyframes rotate {\n  to {\n    -webkit-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n\n.zmiti-index-main-ui {\n  overflow: hidden;\n  width: 750px !important;\n  position: relative;\n}\n\n.zmiti-index-main-ui .zmiti-index-img,\n.zmiti-index-main-ui video {\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate3d(-50%, -50%, 0);\n  transform: translate3d(-50%, -50%, 0);\n  width: 100%;\n  height: auto;\n  z-index: 101;\n}\n\n.zmiti-index-main-ui .zmiti-index-img.img-enter-active, .zmiti-index-main-ui .zmiti-index-img.img-leave-active {\n  -webkit-transition: 0.4s;\n  transition: 0.4s;\n}\n\n.zmiti-index-main-ui .zmiti-index-img.img-enter {\n  -webkit-transform: translate(0, -100vh);\n  transform: translate(0, -100vh);\n  opacity: 0;\n}\n\n.zmiti-index-main-ui .zmiti-index-img.img-leave-to {\n  -webkit-transform: translate(0, 100vh);\n  transform: translate(0, 100vh);\n  opacity: 0;\n}\n\n.zmiti-index-main-ui .zmiti-index-img.active {\n  max-height: 100vh;\n  width: auto;\n  height: 100%;\n  max-width: 100vw;\n}\n\n.zmiti-index-main-ui .zmiti-index-mask {\n  background: #c51a00;\n  color: #fff;\n  z-index: 101;\n  text-align: center;\n}\n\n.zmiti-index-main-ui .zmiti-index-mask.mask-enter-active, .zmiti-index-main-ui .zmiti-index-mask.mask-leave-active {\n  -webkit-transition: 0.4s;\n  transition: 0.4s;\n}\n\n.zmiti-index-main-ui .zmiti-index-mask.mask-enter {\n  -webkit-transform: translate(0, 50vh);\n  transform: translate(0, 50vh);\n  opacity: 0;\n}\n\n.zmiti-index-main-ui .zmiti-index-mask.mask-leave-to {\n  -webkit-transform: translate(0, -50vh);\n  transform: translate(0, -50vh);\n  opacity: 0;\n}\n\n.zmiti-index-main-ui .zmiti-index-mask > img {\n  width: auto;\n  height: auto;\n  max-width: 100vw;\n  max-height: 100vh;\n}\n\n.zmiti-index-main-ui .zmiti-index-mask .zmiti-index-mask-nickname {\n  position: absolute;\n  width: 100%;\n  top: 24vh;\n  font-size: 34px;\n  color: #ffd451;\n}\n\n.zmiti-index-main-ui .zmiti-img {\n  position: relative;\n  z-index: 20;\n}\n\n.zmiti-index-main-ui .zmiti-tip {\n  position: absolute;\n  width: 100%;\n  text-align: center;\n}\n\n.zmiti-index-main-ui .zmiti-wish-text {\n  position: absolute;\n  z-index: 30;\n  top: 60px;\n  width: 90%;\n  left: 5%;\n  color: #fff;\n}\n\n.zmiti-index-main-ui .zmiti-poster {\n  z-index: 100;\n  background: #000;\n  display: -webkit-box;\n  -webkit-box-align: center;\n  -webkit-box-pack: center;\n  -webkit-box-orient: horizontal;\n}\n\n.zmiti-index-main-ui .zmiti-poster img {\n  width: auto;\n  max-width: 100%;\n  max-height: 100%;\n  height: 100%;\n  display: block;\n}\n\n.zmiti-index-main-ui .zmiti-create-btn {\n  margin: 80px auto;\n  width: 180px;\n  height: 60px;\n  line-height: 60px;\n  color: #fff;\n  text-align: center;\n  border-radius: 10px;\n  background: blue;\n}\n\n.zmiti-index-main-ui .zmiti-start {\n  position: absolute;\n  bottom: 100px;\n  width: 100px;\n  height: 100px;\n  border-radius: 50%;\n  text-align: center;\n  background: #ccc;\n  line-height: 100px;\n  left: 50%;\n  margin-left: -50px;\n  z-index: 10;\n  -webkit-transition: 0.1s;\n  transition: 0.1s;\n}\n\n.zmiti-index-main-ui .zmiti-start.active {\n  -webkit-transform: scale(0.95);\n  transform: scale(0.95);\n}\n\n.zmiti-index-main-ui .zmiti-canvas {\n  position: absolute;\n  left: 0;\n  bottom: 0;\n}\n\n.zmiti-index-main-ui .zmiti-team-btn {\n  width: 100px;\n  height: 100px;\n  position: absolute;\n  right: 10px;\n  bottom: 10px;\n  z-index: 10;\n}\n\n.zmiti-index-main-ui .zmiti-player {\n  position: absolute;\n  width: 100px;\n  height: 100px;\n  z-index: 203;\n  top: 50%;\n  left: 50%;\n  margin-left: -50px;\n  margin-top: -50px;\n}\n\n.zmiti-index-main-ui .zmiti-team-page {\n  z-index: 1002;\n}\n\n.zmiti-index-main-ui .zmiti-team-page div {\n  position: absolute;\n  width: 100px;\n  height: 100px;\n  right: 10px;\n  bottom: 10px;\n}\n\n.zmiti-index-main-ui .zmiti-btns {\n  display: -webkit-box;\n  -webkit-box-align: center;\n  -webkit-box-pack: center;\n  -webkit-box-orient: horizontal;\n  position: absolute;\n  bottom: 100px;\n  left: 50%;\n  color: #ffd451;\n  -webkit-transform: translate3d(-50%, 0, 0);\n  transform: translate3d(-50%, 0, 0);\n  z-index: 103;\n}\n\n.zmiti-index-main-ui .zmiti-btns > div {\n  width: 120px;\n  height: 120px;\n  text-align: center;\n  line-height: 60px;\n  margin: 0 50px;\n  font-size: 24px;\n}\n\n.zmiti-index-main-ui .zmiti-share {\n  bottom: 60px;\n}\n\n.zmiti-index-main-ui .zmiti-share > div {\n  width: 100px;\n  height: 100px;\n  text-align: center;\n  line-height: 60px;\n  margin: 0 50px;\n  font-size: 24px;\n}\n\n.zmiti-index-main-ui .zmiti-cacheimg {\n  -webkit-transition: 0.2s 0.2s;\n  transition: 0.2s 0.2s;\n}\n\n.zmiti-index-main-ui .zmiti-cacheimg.active {\n  -webkit-transform: scale(0.74);\n  transform: scale(0.74);\n  -webkit-transform-origin: center 10%;\n  transform-origin: center 10%;\n}\n\n.zmiti-index-main-ui .zmiti-cacheimg > div {\n  position: absolute;\n  left: -40px;\n  width: 30px;\n  bottom: 0;\n  color: #ffd451;\n}\n\n.zmiti-index-main-ui .zmiti-prize {\n  display: -webkit-box;\n  -webkit-box-align: center;\n  -webkit-box-pack: center;\n  -webkit-box-orient: vertical;\n  color: #fcffb4;\n}\n\n.zmiti-index-main-ui .zmiti-prize .zmiti-input-tip {\n  text-align: left;\n  width: 90%;\n  margin-bottom: 20px;\n  font-size: 32px;\n}\n\n.zmiti-index-main-ui .zmiti-prize .zmiti-prize-img {\n  width: 90%;\n  margin-top: 20px;\n}\n\n.zmiti-index-main-ui .zmiti-prize .zmiti-input {\n  border: 1px solid #fff;\n  width: 90%;\n  padding: 10px 0;\n}\n\n.zmiti-index-main-ui .zmiti-prize .zmiti-input img {\n  width: 100px;\n  margin-left: 4%;\n}\n\n.zmiti-index-main-ui .zmiti-prize .zmiti-input input {\n  outline: none;\n  height: 60px;\n  color: #fcffb4;\n  background: transparent;\n  width: 80%;\n  padding-left: 20px;\n  box-sizing: border-box;\n  font-size: 30px;\n  border: none;\n}\n\n.zmiti-index-main-ui .zmiti-arrow {\n  position: absolute;\n  width: 500px;\n  right: 30px;\n  top: 10px;\n}\n\n.zmiti-index-main-ui .zmiti-createimg {\n  background: #000;\n}\n\n.zmiti-index-main-ui .zmiti-mask {\n  position: absolute;\n  z-index: 1002;\n  background: rgba(0, 0, 0, 0.8);\n}\n\n.zmiti-qrcode {\n  position: absolute;\n  width: 140px;\n  height: 140px;\n  bottom: 7vh;\n  left: 50%;\n  margin-left: -70px;\n  z-index: 201;\n}\n\n.zmiti-nickname {\n  position: absolute;\n  z-index: 103;\n  bottom: 23vh;\n  left: 50%;\n  color: #fff;\n  -webkit-transform: translate3d(-50%, 0, 0);\n  transform: translate3d(-50%, 0, 0);\n}\n\n.zmiti-open {\n  position: absolute;\n  z-index: 10;\n  bottom: 10vh;\n  width: 150px;\n  left: 50%;\n  margin-left: -75px;\n}\n\n.zmiti-change-btn {\n  position: absolute;\n  bottom: 8vh;\n  z-index: 200;\n  width: 200px;\n  left: 50%;\n  margin-left: -100px;\n  font-size: 24px;\n  color: #ffd451;\n  text-align: center;\n}\n\n.zmiti-change-btn img {\n  width: 100px;\n}\n\n@media all and (min-height: 1110px) {\n  .zmiti-nickname {\n    bottom: 23.5vh;\n  }\n}\n\n@media all and (min-height: 1448px) {\n  .zmiti-nickname {\n    bottom: 26vh;\n  }\n  .zmiti-open {\n    position: absolute;\n    bottom: 15vh;\n  }\n  .zmiti-change-btn {\n    bottom: 10vh;\n  }\n}\n", ""]);
 
 	// exports
 
@@ -12594,12 +12631,10 @@
 			}
 
 			//alert(paraString);
-			var key = '11headingur1',
-			    key1 = '11nickname31';
-
+			var key = '12headingur1',
+			    key1 = '12nickname31';
 			var nickname = this.getQueryString('nickname');
 			var headimgurl = this.getQueryString('headimgurl');
-
 			if (nickname || window.localStorage.getItem(key1)) {
 
 				if (!window.localStorage.getItem(key1)) {
@@ -12623,7 +12658,7 @@
 				});
 				setTimeout(function () {
 					//
-					wxHandlercallback('', decodeURI(window.nickname) + document.title, document.title);
+					wxHandlercallback('', document.title, window.desc);
 				}, 1000);
 			} else {
 				if (!this.isWeiXin()) {
@@ -12636,7 +12671,7 @@
 			var re = /^[\u4e00-\u9fa5]{0,}$/;
 
 			if (window.location.href.split('?').length > 1) {
-				window.location.href = window.location.href.split('?')[0];
+				///window.location.href = window.location.href.split('?')[0];
 			}
 
 			return;
@@ -23117,7 +23152,7 @@
 /* 23 */
 /***/ (function(module, exports) {
 
-	module.exports = "\r\n\t<transition name='index'>\r\n\t\t<div v-if='show' class=\"lt-full zmiti-index-main-ui \" :style='{background:\"url(\"+imgs.createBg+\") no-repeat center\",backgroundSize:\"cover\"}'>\r\n\t\t\t<div v-show='!cacheImg' ref='page' class='lt-full' style='background:#c51a00;'>\r\n\t\t\t\t<img :src=\"bg\" alt=\"\" class=\"zmiti-index-img\" :class=\"{'active':currentStep>1}\"  v-tap='[playVideo]'>\r\n\t\t\t\t<img :src=\"imgs.player\" v-if='showPlayer' class='zmiti-player' alt=\"\">\r\n\t\t\t\t<video x-webkit-airplay=\"true\" webkit-playsinline=\"true\" playsinline=\"\"\r\n\t\t\t\tx5-video-player-type=\"h5\" x5-video-player-fullscreen=\"true\" \r\n\t\t\t\tv-show='showVideo1' ref='video1'  :src=\"indexVideo\"></video>\r\n\t\t\t\t<div class='zmiti-index-mask lt-full' v-show='showMask'>\r\n\t\t\t\t\t<div class='zmiti-index-mask-nickname'>{{nickname||'新华社网友'}}</div>\r\n\t\t\t\t\t<img :src=\"imgs.mask\" alt=\"\">\r\n\t\t\t\t\t<div class='zmiti-open' v-tap='[next]'>\r\n\t\t\t\t\t\t<img :src=\"imgs.open\" alt=\"\">\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if='showBitmapBtns' class='zmiti-btns'>\r\n\t\t\t\t\t<div v-tap='[restart]'>\r\n\t\t\t\t\t\t<img :src=\"imgs.cancelBtn\" alt=\"\">\r\n\t\t\t\t\t\t<div >重玩一次</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div v-tap='[choose]'>\r\n\t\t\t\t\t\t<img :src=\"imgs.okBtn\" alt=\"\">\r\n\t\t\t\t\t\t<div>确定</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-nickname' v-if='showNickname' >\r\n\t\t\t\t\t<svg v-if='false' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'>\r\n\t\t\t\t\t\t<defs>\r\n\t\t\t\t\t\t\t<path id='p1' d=\"M 0 155 q 130 -160 300 0\" stroke=\"blue\" stroke-width=\"5\" fill=\"none\" />\r\n\t\t\t\t\t\t</defs>\r\n\t\t\t\t\t\t<text  text-anchor = \"middle\" >\r\n\t\t\t\t\t\t\t<textPath startOffset=\"50%\" fill='#fff' xlink:href='#p1'>中华人民共和国</textPath>\r\n\t\t\t\t\t\t</text>\r\n\t\t\t\t\t</svg>\r\n\t\t\t\t\t{{nickname||'新华社网友'}}\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-change-btn' v-if='showChangeBtn' @touchstart='touchstart' @touchend='touchend'>\r\n\t\t\t\t\t<img :src=\"imgs.okBtn\" alt=\"\" @touchstart='imgStart'>\r\n\t\t\t\t\t<div>长按替换对联</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-qrcode' v-if='showQrcode'>\r\n\t\t\t\t\t<img :src=\"imgs.qrcode\" alt=\"\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div v-if='cacheImg && !showPrize' :style='{background:\"url(\"+imgs.createBg+\") no-repeat center\",backgroundSize:\"cover\"}' class='lt-full zmiti-createimg' >\r\n\t\t\t\t<div class='zmiti-cacheimg' >\r\n\t\t\t\t\t<img :src=\"cacheImg\" alt=\"\" >\r\n\t\t\t\t\t<div>\r\n\t\t\t\t\t\t长按保存图片\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-btns zmiti-share'>\r\n\t\t\t\t\t<div v-tap='[showShare]'>\r\n\t\t\t\t\t\t<img :src=\"imgs.cancelBtn\" alt=\"\">\r\n\t\t\t\t\t\t<div>分享</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div v-tap='[showPrizePage]'>\r\n\t\t\t\t\t\t<img :src=\"imgs.okBtn\" alt=\"\">\r\n\t\t\t\t\t\t<div>抽奖</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-team-btn' @touchend='showTeamPage = true'>\r\n\t\t\t\t\t<img :src=\"imgs.teamBtn\" alt=\"\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div v-if='showTeamPage'  class='zmiti-team-page lt-full' :style='{background:\"url(\"+imgs.team+\") no-repeat center\",backgroundSize:\"cover\"}'>\r\n\t\t\t\t<div @touchend='showTeamPage = false'>\r\n\t\t\t\t\t<img :src=\"imgs.back\" alt=\"\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div v-if='showPrize' :style='{background:\"url(\"+imgs.createBg+\") no-repeat center\",backgroundSize:\"cover\"}' class='lt-full zmiti-createimg zmiti-prize' >\r\n\t\t\t\t<div class='zmiti-arrow'>\r\n\t\t\t\t\t<img :src=\"imgs.arrow\" alt=\"\">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-input-tip'>输入手机号参与抽奖</div>\r\n\t\t\t\t<div class='zmiti-input'>\r\n\t\t\t\t\t<input type=\"text\" v-model=\"mobile\"><img  v-tap='[submit]' :src='imgs.sure'/>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-prize-img'>\r\n\t\t\t\t\t<img :src=\"imgs.prize\" alt=\"\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\r\n\t\t\t<div class='lt-full zmiti-mask' v-if='showShareMask' @touchend='showShareMask = false'>\r\n\t\t\t\t<img :src=\"imgs.arrow\" alt=\"\">\r\n\t\t\t</div>\r\n\r\n\t\t\t<Toast :msg='successMsg' :errorMsg='errorMsg'></Toast>\r\n\t\t</div>\r\n\r\n\t</transition>\r\n";
+	module.exports = "\r\n\t<transition name='index'>\r\n\t\t<div v-if='show' class=\"lt-full zmiti-index-main-ui \" :style='{background:\"url(\"+imgs.createBg+\") no-repeat center\",backgroundSize:\"cover\"}'>\r\n\t\t\t<div v-show='!cacheImg' ref='page' class='lt-full' style='background:#c51a00;'>\r\n\t\t\t\t<img class='zmiti-index-img' @touchstart='playVideo' @touchend='playVideo' :src=\"bg\"  alt=\"\"  :class=\"{'active':showNickname}\" >\r\n\t\t\t\t<img @touchstart='playVideo' @touchend='playVideo' :src=\"imgs.player\" v-if='showPlayer' class='zmiti-player' alt=\"\">\r\n\t\t\t\t<video x-webkit-airplay=\"true\" webkit-playsinline=\"true\" playsinline=\"\"\r\n\t\t\t\t@touchstart='playVideo' @touchend='playVideo'\r\n\t\t\t\tx5-video-player-type=\"h5\" x5-video-player-fullscreen=\"true\" \r\n\t\t\t\t ref='video1' v-show=\"showVideo1\"  :src=\"indexVideo\"></video>\r\n\t\t\t\t<transition name='mask'>\r\n\t\t\t\t\t<div class='zmiti-index-mask lt-full' v-if='showMask'>\r\n\t\t\t\t\t\t<div class='zmiti-index-mask-nickname'>{{nickname||'新华社网友'}}</div>\r\n\t\t\t\t\t\t<img :src=\"imgs.mask\" alt=\"\">\r\n\t\t\t\t\t\t<div class='zmiti-open' v-tap='[next]'>\r\n\t\t\t\t\t\t\t<img :src=\"imgs.open\" alt=\"\">\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</transition>\r\n\t\t\t\t<div v-if='showBitmapBtns' class='zmiti-btns'>\r\n\t\t\t\t\t<div v-tap='[restart]'>\r\n\t\t\t\t\t\t<img :src=\"imgs.cancelBtn\" alt=\"\">\r\n\t\t\t\t\t\t<div >重玩一次</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div v-tap='[choose]'>\r\n\t\t\t\t\t\t<img :src=\"imgs.okBtn\" alt=\"\">\r\n\t\t\t\t\t\t<div>确定</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-nickname' v-if='showNickname' >\r\n\t\t\t\t\t<svg v-if='false' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'>\r\n\t\t\t\t\t\t<defs>\r\n\t\t\t\t\t\t\t<path id='p1' d=\"M 0 155 q 130 -160 300 0\" stroke=\"blue\" stroke-width=\"5\" fill=\"none\" />\r\n\t\t\t\t\t\t</defs>\r\n\t\t\t\t\t\t<text  text-anchor = \"middle\" >\r\n\t\t\t\t\t\t\t<textPath startOffset=\"50%\" fill='#fff' xlink:href='#p1'>中华人民共和国</textPath>\r\n\t\t\t\t\t\t</text>\r\n\t\t\t\t\t</svg>\r\n\t\t\t\t\t{{nickname||'新华社网友'}}\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-change-btn' v-if='showChangeBtn' @touchstart='touchstart' @touchend='touchend'>\r\n\t\t\t\t\t<img :src=\"imgs.okBtn\" alt=\"\" @touchstart='imgStart'>\r\n\t\t\t\t\t<div>长按替换对联</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-qrcode' v-if='showQrcode'>\r\n\t\t\t\t\t<img :src=\"imgs.qrcode\" alt=\"\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div v-if='cacheImg && !showPrize' :style='{background:\"url(\"+imgs.createBg+\") no-repeat center\",backgroundSize:\"cover\"}' class='lt-full zmiti-createimg' >\r\n\t\t\t\t<div class='zmiti-cacheimg' :class='createClass' >\r\n\t\t\t\t\t<img :src=\"cacheImg\" alt=\"\" >\r\n\t\t\t\t\t<div>\r\n\t\t\t\t\t\t长按保存图片\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-btns zmiti-share'>\r\n\t\t\t\t\t<div v-tap='[showShare]'>\r\n\t\t\t\t\t\t<img :src=\"imgs.cancelBtn\" alt=\"\">\r\n\t\t\t\t\t\t<div>分享</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div v-tap='[showPrizePage]'>\r\n\t\t\t\t\t\t<img :src=\"imgs.okBtn\" alt=\"\">\r\n\t\t\t\t\t\t<div>抽奖</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-team-btn' @touchend='showTeamPage = true'>\r\n\t\t\t\t\t<img :src=\"imgs.teamBtn\" alt=\"\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div v-if='showTeamPage'  class='zmiti-team-page lt-full' :style='{background:\"url(\"+imgs.team+\") no-repeat center\",backgroundSize:\"cover\"}'>\r\n\t\t\t\t<div @touchend='showTeamPage = false'>\r\n\t\t\t\t\t<img :src=\"imgs.back\" alt=\"\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div v-if='showPrize' :style='{background:\"url(\"+imgs.createBg+\") no-repeat center\",backgroundSize:\"cover\"}' class='lt-full zmiti-createimg zmiti-prize' >\r\n\t\t\t\t<div class='zmiti-arrow'>\r\n\t\t\t\t\t<img :src=\"imgs.arrow\" alt=\"\">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-input-tip'>输入手机号参与抽奖</div>\r\n\t\t\t\t<div class='zmiti-input'>\r\n\t\t\t\t\t<input type=\"text\" v-model=\"mobile\"><img  v-tap='[submit]' :src='imgs.sure'/>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class='zmiti-prize-img'>\r\n\t\t\t\t\t<img :src=\"imgs.prize\" alt=\"\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\r\n\t\t\t<div class='lt-full zmiti-mask' v-if='showShareMask' @touchend='showShareMask = false'>\r\n\t\t\t\t<img :src=\"imgs.arrow\" alt=\"\">\r\n\t\t\t</div>\r\n\r\n\t\t\t<Toast :msg='successMsg' :errorMsg='errorMsg'></Toast>\r\n\t\t</div>\r\n\r\n\t</transition>\r\n";
 
 /***/ }),
 /* 24 */

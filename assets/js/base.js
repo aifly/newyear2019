@@ -51,7 +51,7 @@ for (var attr in imgs) {
 
 
 window.config = {
-  indexvideo:'./assets/video/index.mp4',
+  indexvideo:'./assets/video/index2.mp4',
   indexvideo1:'./assets/video/index1.mp4',
   baseUrl: "https://xlive.xinhuaapp.com",
   secretKey: "e9469538b0623783f38c585821459454",

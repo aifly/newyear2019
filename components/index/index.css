@@ -49,25 +49,57 @@
   top: 50%;
   -webkit-transform: translate3d(-50%, -50%, 0);
   transform: translate3d(-50%, -50%, 0);
-  width: auto;
+  width: 100%;
   height: auto;
-  max-height: 100vh;
-  max-width: 100vw;
   z-index: 101;
+}
+
+.zmiti-index-main-ui .zmiti-index-img.img-enter-active, .zmiti-index-main-ui .zmiti-index-img.img-leave-active {
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.zmiti-index-main-ui .zmiti-index-img.img-enter {
+  -webkit-transform: translate(0, -100vh);
+  transform: translate(0, -100vh);
+  opacity: 0;
+}
+
+.zmiti-index-main-ui .zmiti-index-img.img-leave-to {
+  -webkit-transform: translate(0, 100vh);
+  transform: translate(0, 100vh);
+  opacity: 0;
 }
 
 .zmiti-index-main-ui .zmiti-index-img.active {
   max-height: 100vh;
   width: auto;
-  height: auto;
+  height: 100%;
   max-width: 100vw;
 }
 
 .zmiti-index-main-ui .zmiti-index-mask {
-  background: #f23426;
+  background: #c51a00;
   color: #fff;
   z-index: 101;
   text-align: center;
+}
+
+.zmiti-index-main-ui .zmiti-index-mask.mask-enter-active, .zmiti-index-main-ui .zmiti-index-mask.mask-leave-active {
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.zmiti-index-main-ui .zmiti-index-mask.mask-enter {
+  -webkit-transform: translate(0, 50vh);
+  transform: translate(0, 50vh);
+  opacity: 0;
+}
+
+.zmiti-index-main-ui .zmiti-index-mask.mask-leave-to {
+  -webkit-transform: translate(0, -50vh);
+  transform: translate(0, -50vh);
+  opacity: 0;
 }
 
 .zmiti-index-main-ui .zmiti-index-mask > img {
@@ -229,6 +261,11 @@
 }
 
 .zmiti-index-main-ui .zmiti-cacheimg {
+  -webkit-transition: 0.2s 0.2s;
+  transition: 0.2s 0.2s;
+}
+
+.zmiti-index-main-ui .zmiti-cacheimg.active {
   -webkit-transform: scale(0.74);
   transform: scale(0.74);
   -webkit-transform-origin: center 10%;

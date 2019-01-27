@@ -123,6 +123,11 @@ new Vue({
 			obserable.trigger({
 				type:'hideloading'
 			})
+			setTimeout(() => {
+				obserable.trigger({
+					type: 'initIndex'
+				})
+			}, 1000);
 			s.show = true;
 			s.loaded = true;
 			

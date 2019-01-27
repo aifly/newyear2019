@@ -19,28 +19,55 @@ $bgColor: #f23426;
 
         @include transform(translate3d(-50%, -50%, 0));
 
-        width: auto;
-        height: auto;
+        width:100%;
+        height:auto;
 
-        max-height: 100vh;
-        max-width: 100vw;
+       // max-height: 100vh;
+       // max-width: 100vw;
         z-index: 101;
     }
     .zmiti-index-img{
+
+         &.img-enter-active,
+         &.img-leave-active {
+             @include transition(.4s);
+         }
+         &.img-enter{
+            @include transform(translate(0, -100vh));
+            opacity: 0;
+         }
+         &.img-leave-to {
+             @include transform(translate(0, 100vh));
+             opacity: 0;
+         }
         &.active{
             max-height: 100vh;
             width: auto;
-            height: auto;
+            height: 100%;
             max-width: 100vw;
         }
     }
     
 
     .zmiti-index-mask {
-        background:#f23426;
+        background:#c51a00;
         color: #fff;
         z-index: 101;
         text-align: center;
+        &.mask-enter-active,
+        &.mask-leave-active {
+            @include transition(.4s);
+        }
+
+        &.mask-enter{
+
+            @include transform(translate(0,50vh));
+            opacity: 0;
+        }
+        &.mask-leave-to {
+            @include transform(translate(0,-50vh));
+            opacity: 0;
+        }
         &>img{
 
             width: auto;
@@ -208,8 +235,12 @@ $bgColor: #f23426;
     }
 
     .zmiti-cacheimg{
-        @include transform(scale(.74));
-        @include transformOrigin(center 10%);
+        
+        @include transition(.2s .2s);
+        &.active{
+            @include transform(scale(.74));
+            @include transformOrigin(center 10%);
+        }
 
         &>div{
             @include pos(a);
@@ -263,12 +294,15 @@ $bgColor: #f23426;
     }
     .zmiti-createimg{
         background:#000;
+         
     }
 
     .zmiti-mask{
         @include pos(a);
         z-index: 1002;
         background:rgba(0,0,0,.8);
+
+        
 
     }
 }

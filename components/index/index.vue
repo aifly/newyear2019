@@ -2,18 +2,21 @@
 	<transition name='index'>
 		<div v-if='show' class="lt-full zmiti-index-main-ui " :style='{background:"url("+imgs.createBg+") no-repeat center",backgroundSize:"cover"}'>
 			<div v-show='!cacheImg' ref='page' class='lt-full' style='background:#c51a00;'>
-				<img :src="bg" alt="" class="zmiti-index-img" :class="{'active':currentStep>1}"  v-tap='[playVideo]'>
-				<img :src="imgs.player" v-if='showPlayer' class='zmiti-player' alt="">
+				<img class='zmiti-index-img' @touchstart='playVideo' @touchend='playVideo' :src="bg"  alt=""  :class="{'active':showNickname}" >
+				<img @touchstart='playVideo' @touchend='playVideo' :src="imgs.player" v-if='showPlayer' class='zmiti-player' alt="">
 				<video x-webkit-airplay="true" webkit-playsinline="true" playsinline=""
+				@touchstart='playVideo' @touchend='playVideo'
 				x5-video-player-type="h5" x5-video-player-fullscreen="true" 
-				v-show='showVideo1' ref='video1'  :src="indexVideo"></video>
-				<div class='zmiti-index-mask lt-full' v-show='showMask'>
-					<div class='zmiti-index-mask-nickname'>{{nickname||'新华社网友'}}</div>
-					<img :src="imgs.mask" alt="">
-					<div class='zmiti-open' v-tap='[next]'>
-						<img :src="imgs.open" alt="">
+				 ref='video1' v-show="showVideo1"  :src="indexVideo"></video>
+				<transition name='mask'>
+					<div class='zmiti-index-mask lt-full' v-if='showMask'>
+						<div class='zmiti-index-mask-nickname'>{{nickname||'新华社网友'}}</div>
+						<img :src="imgs.mask" alt="">
+						<div class='zmiti-open' v-tap='[next]'>
+							<img :src="imgs.open" alt="">
+						</div>
 					</div>
-				</div>
+				</transition>
 				<div v-if='showBitmapBtns' class='zmiti-btns'>
 					<div v-tap='[restart]'>
 						<img :src="imgs.cancelBtn" alt="">
@@ -44,7 +47,7 @@
 				</div>
 			</div>
 			<div v-if='cacheImg && !showPrize' :style='{background:"url("+imgs.createBg+") no-repeat center",backgroundSize:"cover"}' class='lt-full zmiti-createimg' >
-				<div class='zmiti-cacheimg' >
+				<div class='zmiti-cacheimg' :class='createClass' >
 					<img :src="cacheImg" alt="" >
 					<div>
 						长按保存图片
@@ -106,8 +109,9 @@
 			return{
 				imgs,
 				errorMsg:"",
+				createClass:"",
 				bg:imgs.index,
-				showVideo1:false,
+				showVideo1:true,
 				secretKey: "e9469538b0623783f38c585821459454",
                 host: "https://xlive.xinhuaapp.com", //测试域名：https://testxlive.xinhuaapp.com
 				showMask:false,
@@ -194,7 +198,9 @@
 					setTimeout(() => {
 						s.successMsg = '';
 						s.errorMsg = '';
+						s.showPrize = false;
 					}, 2000);
+ 
 				})
 			},
 
@@ -202,13 +208,14 @@
 				this.showMask = false;
 				this.showVideo1  = true;
 				this.showImg = true;
-				this.indexVideo = window.config.indexvideo1;	
+				//this.indexVideo = window.config.indexvideo1;	
 				setTimeout(() => {
 					this.$refs['video1'].play();
 				}, 1);		
 			},
 			restart(){
-				window.location.href = window.location.href;
+				this.showBitmapBtns = false;
+				this.showChangeBtn = true;
 			},
 			choose(){
 				this.bg = imgs['img'+this.indexArr[this.iNow]];
@@ -237,6 +244,10 @@
 							//s.mergeImg = '';
 							//s.createImg = src;
 							s.cacheImg = src;
+
+							setTimeout(() => {
+								s.createClass = 'active';
+							}, 20);
 					      },
 					      width: dom.clientWidth,
 					      height:dom.clientHeight
@@ -253,27 +264,40 @@
 				this.video = video;
 				video.play();
 
+
+				video.addEventListener('timeupdate',()=>{
+					if(video.currentTime>6&&this.currentStep === 0){
+						this.currentStep++;
+						video.pause();
+						setTimeout(() => {
+							this.bg = imgs.index1;
+							this.showMask = true;
+						}, 2000);
+					}
+				});
+
+				video.addEventListener('canplaythrough',()=>{
+					//this.showPlayer = false;
+
+				});
+
 				video.addEventListener('play',()=>{
-					///this.showImg = false;
 					this.showPlayer = false;
+					///this.showImg = false;
+				 
 				})
 
 				this.showVideo1 = true;
 
 				video.addEventListener('ended',(e)=>{
-					this.currentStep++;
-					if(e.target.currentSrc.indexOf(window.config.indexvideo.replace('./',''))>-1){//播放的是第一个视频
-						this.bg = imgs.index1;
-						this.showMask = true;
-					}else if(e.target.currentSrc.indexOf(window.config.indexvideo1.replace('./',''))>-1){
-						this.bg = imgs.index2;
-						setTimeout(() => {
-							this.showVideo1 = false;//播放完成以后，隐藏视频。
-						}, 200);
-						this.showNickname = true;
-						this.showChangeBtn = true;
-						
-					}
+
+					this.bg = imgs.index2;
+					setTimeout(() => {
+						this.showVideo1 = false;//播放完成以后，隐藏视频。
+					}, 200);
+					this.showNickname = true;
+					this.showChangeBtn = true;
+					
 					
 				})
 			},
@@ -306,16 +330,22 @@
 					}
 					this.iNow++;
 					this.iNow %= this.len;
-					this.bg = imgs['gif'+this.indexArr[this.iNow]];
-				},100);
+					this.bg = imgs['img'+this.indexArr[this.iNow]];
+				},200);
 				return false;
 			},
-			touchend(){
+			touchend(e){
+				setTimeout(() => {
+					clearInterval(this.timer);
+					if(e.target.className === 'zmiti-change-btn'||e.target.parentNode.className === 'zmiti-change-btn'){
+						this.showChangeBtn = false;
+						this.showBitmapBtns = true;
+						this.showCanvas = false;
+						this.bg = imgs['gif'+this.indexArr[this.iNow]];
+					}
+				}, 1000);
 
-				clearInterval(this.timer);
-				this.showBitmapBtns = true;
-				this.showCanvas = false;
-				this.showChangeBtn = false;
+				
 			},
 			
 			end(){
@@ -351,7 +381,7 @@
 								}
 								s.iNow++;
 								s.iNow %= s.len;
-								s.bg = imgs['gif'+s.indexArr[s.iNow]];
+								s.bg = imgs['img'+s.indexArr[s.iNow]];
 							}
 							last_x = x;
 							last_y = y;
@@ -364,6 +394,10 @@
 			this.setSize();
 			this.shake()
 			this.indexArr = [];
+			
+			this.obserable.on('initIndex',()=>{
+				this.iNow =  0;
+			})
 			for(var i =1;i<this.len+1;i++){
 				this.indexArr[i-1]= i;
 			}

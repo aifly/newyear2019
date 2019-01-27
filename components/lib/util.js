@@ -144,12 +144,10 @@ var zmitiUtil = {
 		 }
 
 		 //alert(paraString);
-		 var key = '11headingur1',
-			 key1 = '11nickname31';
-
+		 var key = '12headingur1',
+			 key1 = '12nickname31';
 			var nickname = this.getQueryString('nickname');
 			var headimgurl = this.getQueryString('headimgurl');
-
 		if (nickname || window.localStorage.getItem(key1)) {
 			
 			if (!window.localStorage.getItem(key1)){
@@ -173,7 +171,7 @@ var zmitiUtil = {
 			})
 			setTimeout(()=>{
 				//
-				wxHandlercallback('', decodeURI(window.nickname) + document.title, document.title);
+				wxHandlercallback('',  document.title, window.desc);
 			},1000)
 		}
 		else{
@@ -188,7 +186,7 @@ var zmitiUtil = {
 		 var re = /^[\u4e00-\u9fa5]{0,}$/;
 		
 		 if (window.location.href.split('?').length > 1 ) {
-		 	window.location.href = window.location.href.split('?')[0];
+		 	///window.location.href = window.location.href.split('?')[0];
 		 }
 		
 		return;
