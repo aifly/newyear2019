@@ -365,7 +365,8 @@ $bgColor: #f23426;
     }
     .zmiti-open {
         @include pos(a);
-        bottom: 15vh;
+        bottom: auto;
+        top: 65vh;
     }
 
     .zmiti-change-btn{

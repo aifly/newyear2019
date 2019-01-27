@@ -397,7 +397,8 @@
   }
   .zmiti-open {
     position: absolute;
-    bottom: 15vh;
+    bottom: auto;
+    top: 65vh;
   }
   .zmiti-change-btn {
     bottom: 10vh;
