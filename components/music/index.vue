@@ -1,6 +1,6 @@
 <template>
 	<div  class="lt-full zmiti-music-main-ui" :style='{height:"10vh"}'>
-		<audio ref='music' v-for='audio in audios' :src='audio.src' :autoplay="audio.autoplay" :loop="audio.loop"></audio>
+		<audio ref='music' :key="i" v-for='(audio,i) in audios' :src='audio.src' :autoplay="audio.autoplay" :loop="audio.loop"></audio>
 
 		<div  @click='toggleMusic' class='zmiti-play' :class='{"rotate":rotate}' :style="playStyle">
 			<img  :src='imgs.play'/>
@@ -59,7 +59,7 @@
 			
 			var {obserable} = this;
 
-			var audio = this.$refs['music'][0];
+			var audio = this.$refs['music'][1];
 			var len = audio;
 			len && $(audio).on('play', () => {
 
@@ -77,7 +77,7 @@
 
 			obserable.on('playVoice',(key)=>{
 				this.audios.forEach((audio,i)=>{
-					if(i>0 ){
+					if(i>=0 ){
 
 						if(audio.name === key){
 							this.$refs['music'][i].currentTime = 0;

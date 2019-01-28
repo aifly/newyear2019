@@ -3,26 +3,23 @@
 		<div v-if='show' class="lt-full zmiti-index-main-ui " :style='{background:"url("+imgs.createBg+") no-repeat center",backgroundSize:"cover"}'>
 			<div v-show='!cacheImg' ref='page' class='lt-full' style='background:#c51a00;'>
 				<img class='zmiti-index-img' @touchstart='playVideo' @touchend='playVideo' :src="bg"  alt=""  :class="{'active':showNickname}" >
-				<img @touchstart='playVideo' @touchend='playVideo' :src="imgs.player" v-if='showPlayer' class='zmiti-player' alt="">
-				<video x-webkit-airplay="true" webkit-playsinline="true" playsinline=""
-				@touchstart='playVideo' @touchend='playVideo'
-				x5-video-player-type="h5" x5-video-player-fullscreen="true" 
-				 ref='video1' v-show="showVideo1"  :src="indexVideo"></video>
+				<img @touchstart='playVideo'  @touchend='playVideo' :src="imgs.player" v-if='showPlayer' class='zmiti-player' alt="">
+				
 				<transition name='mask'>
 					<div class='zmiti-index-mask lt-full' v-if='showMask'>
 						<div class='zmiti-index-mask-nickname'>{{nickname||'新华社网友'}}</div>
 						<img :src="imgs.mask" alt="">
-						<div class='zmiti-open' v-tap='[next]'>
+						<div class='zmiti-open flash' v-tap='[next]' @touchstart='openBtnActive = true' @touchend='openBtnActive = false' :style="{WebkitTransform:'scale('+(openBtnActive?.96:1)+')'}">
 							<img :src="imgs.open" alt="">
 						</div>
 					</div>
 				</transition>
 				<div v-if='showBitmapBtns' class='zmiti-btns'>
-					<div v-tap='[restart]'>
+					<div class='flash' v-tap='[restart]' @touchstart='rechooseActive=true' @touchend='rechooseActive = false' :style="{WebkitTransform:'scale('+(rechooseActive?.96:1)+')'}">
 						<img :src="imgs.cancelBtn" alt="">
-						<div >重玩一次</div>
+						<div >重新选择</div>
 					</div>
-					<div v-tap='[choose]'>
+					<div v-tap='[choose]' class='flash1' @touchstart='sureActive=true' @touchend='sureActive = false' :style="{WebkitTransform:'scale('+(sureActive?.96:1)+')'}">
 						<img :src="imgs.okBtn" alt="">
 						<div>确定</div>
 					</div>
@@ -38,29 +35,34 @@
 					</svg>
 					{{nickname||'新华社网友'}}
 				</div>
-				<div class='zmiti-change-btn' v-if='showChangeBtn' @touchstart='touchstart' @touchend='touchend'>
+				<div class='zmiti-change-btn flash'  v-if='showChangeBtn' @touchstart='touchstart' @touchend='touchend'>
 					<img :src="imgs.okBtn" alt="" @touchstart='imgStart'>
-					<div>长按替换对联</div>
+					<div>长按选择对联</div>
 				</div>
 				<div class='zmiti-qrcode' v-if='showQrcode'>
 					<img :src="imgs.qrcode" alt="">
+					<div>识别二维码 定制你的新春年画</div>
 				</div>
 			</div>
+			<video x-webkit-airplay="true" webkit-playsinline="true" playsinline=""
+				@touchstart='playVideo' @touchend='playVideo'
+				x5-video-player-type="h5" x5-video-player-fullscreen="true" 
+				 ref='video1'  v-show='showVideo1' :style="{zIndex:showVideo1?2000:-1}"  :src="indexVideo"></video>
 			<div v-if='cacheImg && !showPrize' :style='{background:"url("+imgs.createBg+") no-repeat center",backgroundSize:"cover"}' class='lt-full zmiti-createimg' >
-				<div class='zmiti-cacheimg' :class='createClass' >
+				<div class='zmiti-cacheimg' :class='createClass'>
 					<img :src="cacheImg" alt="" >
 					<div>
 						长按保存图片
 					</div>
 				</div>
 				<div class='zmiti-btns zmiti-share'>
-					<div v-tap='[showShare]'>
+					<div v-tap='[showShare]' class='flash'>
 						<img :src="imgs.cancelBtn" alt="">
-						<div>分享</div>
+						<div>再次定制</div>
 					</div>
-					<div v-tap='[showPrizePage]'>
+					<div v-tap='[showPrizePage]' class='flash1'>
 						<img :src="imgs.okBtn" alt="">
-						<div>抽奖</div>
+						<div>分享祝福</div>
 					</div>
 				</div>
 				<div class='zmiti-team-btn' @touchend='showTeamPage = true'>
@@ -72,21 +74,23 @@
 					<img :src="imgs.back" alt="">
 				</div>
 			</div>
-			<div v-if='showPrize' :style='{background:"url("+imgs.createBg+") no-repeat center",backgroundSize:"cover"}' class='lt-full zmiti-createimg zmiti-prize' >
+			<div v-if='showPrize'  :style='{background:"url("+imgs.createBg+") no-repeat center",backgroundSize:"cover"}' class='lt-full zmiti-createimg zmiti-prize' >
+				<div class='lt-full' v-tap='[backtoShare]'></div>
 				<div class='zmiti-arrow'>
-					<img :src="imgs.arrow" alt="">
+					<img :src="imgs.arrow" alt="" class='zmiti-prevent-img'>
 				</div>
 				<div class='zmiti-input-tip'>输入手机号参与抽奖</div>
 				<div class='zmiti-input'>
 					<input type="text" v-model="mobile"><img  v-tap='[submit]' :src='imgs.sure'/>
 				</div>
 				<div class='zmiti-prize-img'>
-					<img :src="imgs.prize" alt="">
+					<img :src="imgs.prize" alt=""  class='zmiti-prevent-img'>
 				</div>
+				<div class='zmiti-prize-tip'>奖品由中国金币总公司提供 </div>
 			</div>
 
 			<div class='lt-full zmiti-mask' v-if='showShareMask' @touchend='showShareMask = false'>
-				<img :src="imgs.arrow" alt="">
+				<img  class='zmiti-prevent-img' :src="imgs.arrow" alt="">
 			</div>
 
 			<Toast :msg='successMsg' :errorMsg='errorMsg'></Toast>
@@ -109,6 +113,8 @@
 			return{
 				imgs,
 				errorMsg:"",
+				rechooseActive:false,
+				sureActive:false,
 				createClass:"",
 				bg:imgs.index,
 				showVideo1:true,
@@ -118,6 +124,7 @@
 				cacheImg:'',
 				viewH:window.innerHeight,
 				viewW:window.innerWidth,
+				openBtnActive:false,
 				indexVideo:window.config.indexvideo,
 				showImg:true,
 				showPrize:false,
@@ -144,6 +151,7 @@
 				createImg:'',
 				showTeamPage:false,
 				successMsg:'',
+				longtapChangeActive:false,
 				result:{
 					img:'',
 					wish:''
@@ -156,14 +164,25 @@
 		},
 		
 		methods:{
-
+			longTapChange(index){
+				this.longtapChangeActive = !!index;
+			},
 			showShare(){
-				this.showShareMask = true;
+				//this.showShareMask = true;
+				this.cacheImg = '';
+				this.showQrcode = false;
+				this.showNickname = true;
+				
+				this.restart();
 			},
 			imgStart(e){
 				e.preventDefault(); 
 			},
 
+			backtoShare(e){
+				
+				this.showPrize = false;
+			},
 
 			submit(){
 				if(!(/^1[34578]\d{9}$/.test(this.mobile))){ 
@@ -216,6 +235,12 @@
 			restart(){
 				this.showBitmapBtns = false;
 				this.showChangeBtn = true;
+
+				/* this.touchstart();
+				setTimeout(() => {
+					this.touchend('',true);
+				}, 2000); */
+
 			},
 			choose(){
 				this.bg = imgs['img'+this.indexArr[this.iNow]];
@@ -252,13 +277,13 @@
 					      width: dom.clientWidth,
 					      height:dom.clientHeight
 					})
-				},100)
+				},500);
 			},
-			playVideo(){
+			playVideo(e){
+				e.preventDefault();
 				if(this.currentStep>0){
 					return;
 				}
-
 
 				var video = this.$refs['video1'];
 				this.video = video;
@@ -266,6 +291,7 @@
 
 
 				video.addEventListener('timeupdate',()=>{
+					this.showImg = false;
 					if(video.currentTime>6&&this.currentStep === 0){
 						this.currentStep++;
 						video.pause();
@@ -287,19 +313,27 @@
 				 
 				})
 
-				this.showVideo1 = true;
-
 				video.addEventListener('ended',(e)=>{
 
 					this.bg = imgs.index2;
+					
 					setTimeout(() => {
 						this.showVideo1 = false;//播放完成以后，隐藏视频。
-					}, 200);
+						//this.video.setAttribute('x5-video-player-fullscreen',false);
+						//this.video.display = 'none';
+					}, 100);
 					this.showNickname = true;
 					this.showChangeBtn = true;
+					this.showImg = true;
+
+					this.obserable.trigger({
+						type:'playVoice',
+						
+					})
 					
 					
-				})
+				});
+				return false;
 			},
 
 			setSize(){
@@ -315,12 +349,19 @@
 				//this.$refs['video1'].
 			},
 			touchstart(e){
-				e.preventDefault();
-				e.stopPropagation();
-
+				if(e){
+					e.preventDefault();
+					e.stopPropagation();
+				}
+				this.obserable.trigger({
+					type:'playVoice',
+				})
 				if(this.iNow <= -1){
 					this.iNow = 0;
 				}
+
+				this.longtapChangeActive = true;
+				clearInterval(this.timer);
 				
 				this.timer = setInterval(()=>{
 					if(this.iNow === 0){
@@ -331,13 +372,17 @@
 					this.iNow++;
 					this.iNow %= this.len;
 					this.bg = imgs['img'+this.indexArr[this.iNow]];
+					this.indexArr = this.indexArr.concat([]);
+					console.log(this.iNow);
 				},200);
 				return false;
 			},
-			touchend(e){
+			touchend(e,isNew=false){
+				this.longtapChangeActive = false;
+				
 				setTimeout(() => {
 					clearInterval(this.timer);
-					if(e.target.className === 'zmiti-change-btn'||e.target.parentNode.className === 'zmiti-change-btn'){
+					if(isNew||e.target.className.indexOf('zmiti-change-btn')>-1||e.target.parentNode.className.indexOf('zmiti-change-btn')>-1){
 						this.showChangeBtn = false;
 						this.showBitmapBtns = true;
 						this.showCanvas = false;
@@ -353,6 +398,9 @@
 			},
 
 			shake(){
+				if(!this.showNickname){
+					return;
+				}
 				 if (window.DeviceMotionEvent) {
 					   window.addEventListener('devicemotion',deviceMotionHandler,false);
  				}
@@ -388,11 +436,26 @@
 							last_z = z;
 						}
 				}
+			},
+			updatePv(){
+				var s = this;
+				axios.post(s.host + '/xhs-security-activity/activity/num/updateNum', {
+						"secretKey": s.secretKey, // 请求秘钥
+						"nm": "gcbn" // 活动某组图片点赞标识 或者活动某组图片浏览量标识 标识由更新接口定义
+					}).then(function (data) {
+						var dt = data.data;
+						if (typeof dt === 'string') {
+							dt = JSON.parse(dt);
+						}
+						console.log(dt);
+
+					});
 			}
 		},
 		mounted(){
 			this.setSize();
 			this.shake()
+			this.updatePv();
 			this.indexArr = [];
 			
 			this.obserable.on('initIndex',()=>{
@@ -401,6 +464,6 @@
 			for(var i =1;i<this.len+1;i++){
 				this.indexArr[i-1]= i;
 			}
-
+			
 		}
 	}

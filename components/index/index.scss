@@ -16,6 +16,7 @@ $bgColor: #f23426;
 
         left: 50%;
         top: 50%;
+         object-fit: cover;
 
         @include transform(translate3d(-50%, -50%, 0));
 
@@ -27,6 +28,9 @@ $bgColor: #f23426;
         z-index: 101;
     }
     .zmiti-index-img{
+
+
+        z-index: 100;
 
          &.img-enter-active,
          &.img-leave-active {
@@ -47,12 +51,27 @@ $bgColor: #f23426;
             max-width: 100vw;
         }
     }
+
+    &>div{
+        &>img{
+             ///  pointer-events: none;
+        }
+    }
+
+    @at-root.zmiti-prevent-img{
+        pointer-events: none;
+    }
     
 
     .zmiti-index-mask {
         background:#c51a00;
         color: #fff;
-        z-index: 101;
+        z-index: 2001;
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        left: 0;
+        bottom: 0 !important;
         text-align: center;
         &.mask-enter-active,
         &.mask-leave-active {
@@ -114,7 +133,7 @@ $bgColor: #f23426;
 
     .zmiti-poster {
         z-index: 100;
-        background: #000;
+        //background: #000;
 
         @include displayBox(horizontal);
 
@@ -186,16 +205,34 @@ $bgColor: #f23426;
 
     .zmiti-player {
         @include pos(a);
-        width: 100px;
-        height: 100px;
-        z-index: 203;
-        top: 50%;
-        left: 50%;
-        margin-left: -50px;
+        width: 140px;
+        z-index: 2005;
+        top: 90%;
+        right: 10%;
         margin-top: -50px;;;
+        @include animation(shake 1.2s linear infinite);
+    }
+    @-webkit-keyframes shake{
+        20%{
+            @include transform(rotate(10deg));
+        }
+        40%{
+            @include transform(rotate(-6deg));
+        }
+        60% {
+            @include transform(rotate(2deg));
+        }
+        70%{
+            
+            @include transform(rotate(0deg));
+        }
+        100%{
+            @include transform(rotate(0deg));
+
+        }
     }
     .zmiti-team-page{
-        z-index:1002;
+        z-index:2012;
         div{
             @include pos(a);
             width: 100px;
@@ -204,7 +241,17 @@ $bgColor: #f23426;
             bottom: 10px;
         }
     }
-
+    .flash{
+        @include animation(flash 1s infinite alternate);
+    }
+    .flash1 {
+        @include animation(flash 1s .4s infinite alternate);
+    }
+    @-webkit-keyframes flash{
+        to{
+            @include transform(scale(1.1))
+        }
+    }
     .zmiti-btns {
         @include displayBox(horizontal);
         @include pos(a);
@@ -212,7 +259,7 @@ $bgColor: #f23426;
         left: 50%;
         color:#ffd451;
         @include transform(translate3d(-50%,0,0));
-        z-index: 103;
+        z-index:1003;
         &>div {
             width: 120px;
             height: 120px;
@@ -235,7 +282,8 @@ $bgColor: #f23426;
     }
 
     .zmiti-cacheimg{
-        
+        @include pos(r);
+        z-index: 2009;
         @include transition(.2s .2s);
         &.active{
             @include transform(scale(.74));
@@ -260,14 +308,30 @@ $bgColor: #f23426;
             margin-bottom: 20px;
             font-size:32px;
         }
+        .zmiti-prize-tip{
+            @include pos(a);
+            width: 100%;
+            text-align: center;
+            color:#fff;
+            font-size:24px;
+            bottom: 0;
+            left: 0;;
+        }
         .zmiti-prize-img{
             width: 90%;
             margin-top: 20px;
         }
+        .lt-full{
+
+            z-index:100;
+        }
         .zmiti-input{
             border:1px solid #fff;
             width: 90%;
+            @include pos(r);
+            z-index: 1000;
             padding: 10px 0;
+            
             img{
                 width: 100px;
                 margin-left: 4%;
@@ -293,7 +357,8 @@ $bgColor: #f23426;
         top: 10px;
     }
     .zmiti-createimg{
-        background:#000;
+        z-index:2004;
+        @include pos(r);
          
     }
 
@@ -309,18 +374,26 @@ $bgColor: #f23426;
 .zmiti-qrcode{
     @include pos(a);
     $size:140px;
-    width: $size;
-    height: $size;
-    top: 82vh;
-    left: 50%;
-    margin-left: -$size/2;
-    z-index: 201;
+    width: 100%;
+    top: 81vh;
+    left:0;
+    z-index: 2098;
+    img{
+        width: $size;
+        height: $size;
+    }
+
+    text-align: center;
+    font-size:22px;
+    color:#fff;
+
+
 }
 
 
 .zmiti-nickname {
         @include pos(a);
-        z-index: 103;
+        z-index: 2003;
         bottom:23vh;
         left: 50%;
 
@@ -340,7 +413,7 @@ $bgColor: #f23426;
  .zmiti-change-btn {
      @include pos(a);
      bottom: 8vh;
-     z-index: 200;
+     z-index: 2004;
      width: 200px;
      left: 50%;
      margin-left: -100px;

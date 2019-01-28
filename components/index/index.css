@@ -47,11 +47,16 @@
   position: absolute;
   left: 50%;
   top: 50%;
+  object-fit: cover;
   -webkit-transform: translate3d(-50%, -50%, 0);
   transform: translate3d(-50%, -50%, 0);
   width: 100%;
   height: auto;
   z-index: 101;
+}
+
+.zmiti-index-main-ui .zmiti-index-img {
+  z-index: 100;
 }
 
 .zmiti-index-main-ui .zmiti-index-img.img-enter-active, .zmiti-index-main-ui .zmiti-index-img.img-leave-active {
@@ -78,10 +83,19 @@
   max-width: 100vw;
 }
 
+.zmiti-prevent-img {
+  pointer-events: none;
+}
+
 .zmiti-index-main-ui .zmiti-index-mask {
   background: #c51a00;
   color: #fff;
-  z-index: 101;
+  z-index: 2001;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  bottom: 0 !important;
   text-align: center;
 }
 
@@ -139,7 +153,6 @@
 
 .zmiti-index-main-ui .zmiti-poster {
   z-index: 100;
-  background: #000;
   display: -webkit-box;
   -webkit-box-align: center;
   -webkit-box-pack: center;
@@ -203,17 +216,40 @@
 
 .zmiti-index-main-ui .zmiti-player {
   position: absolute;
-  width: 100px;
-  height: 100px;
-  z-index: 203;
-  top: 50%;
-  left: 50%;
-  margin-left: -50px;
+  width: 140px;
+  z-index: 2005;
+  top: 90%;
+  right: 10%;
   margin-top: -50px;
+  -webkit-animation: shake 1.2s linear infinite;
+  animation: shake 1.2s linear infinite;
+}
+
+@-webkit-keyframes shake {
+  20% {
+    -webkit-transform: rotate(10deg);
+    transform: rotate(10deg);
+  }
+  40% {
+    -webkit-transform: rotate(-6deg);
+    transform: rotate(-6deg);
+  }
+  60% {
+    -webkit-transform: rotate(2deg);
+    transform: rotate(2deg);
+  }
+  70% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
 }
 
 .zmiti-index-main-ui .zmiti-team-page {
-  z-index: 1002;
+  z-index: 2012;
 }
 
 .zmiti-index-main-ui .zmiti-team-page div {
@@ -222,6 +258,23 @@
   height: 100px;
   right: 10px;
   bottom: 10px;
+}
+
+.zmiti-index-main-ui .flash {
+  -webkit-animation: flash 1s infinite alternate;
+  animation: flash 1s infinite alternate;
+}
+
+.zmiti-index-main-ui .flash1 {
+  -webkit-animation: flash 1s 0.4s infinite alternate;
+  animation: flash 1s 0.4s infinite alternate;
+}
+
+@-webkit-keyframes flash {
+  to {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
 }
 
 .zmiti-index-main-ui .zmiti-btns {
@@ -235,7 +288,7 @@
   color: #ffd451;
   -webkit-transform: translate3d(-50%, 0, 0);
   transform: translate3d(-50%, 0, 0);
-  z-index: 103;
+  z-index: 1003;
 }
 
 .zmiti-index-main-ui .zmiti-btns > div {
@@ -261,6 +314,8 @@
 }
 
 .zmiti-index-main-ui .zmiti-cacheimg {
+  position: relative;
+  z-index: 2009;
   -webkit-transition: 0.2s 0.2s;
   transition: 0.2s 0.2s;
 }
@@ -295,14 +350,30 @@
   font-size: 32px;
 }
 
+.zmiti-index-main-ui .zmiti-prize .zmiti-prize-tip {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 24px;
+  bottom: 0;
+  left: 0;
+}
+
 .zmiti-index-main-ui .zmiti-prize .zmiti-prize-img {
   width: 90%;
   margin-top: 20px;
 }
 
+.zmiti-index-main-ui .zmiti-prize .lt-full {
+  z-index: 100;
+}
+
 .zmiti-index-main-ui .zmiti-prize .zmiti-input {
   border: 1px solid #fff;
   width: 90%;
+  position: relative;
+  z-index: 1000;
   padding: 10px 0;
 }
 
@@ -331,7 +402,8 @@
 }
 
 .zmiti-index-main-ui .zmiti-createimg {
-  background: #000;
+  z-index: 2004;
+  position: relative;
 }
 
 .zmiti-index-main-ui .zmiti-mask {
@@ -342,17 +414,23 @@
 
 .zmiti-qrcode {
   position: absolute;
+  width: 100%;
+  top: 81vh;
+  left: 0;
+  z-index: 2098;
+  text-align: center;
+  font-size: 22px;
+  color: #fff;
+}
+
+.zmiti-qrcode img {
   width: 140px;
   height: 140px;
-  top: 82vh;
-  left: 50%;
-  margin-left: -70px;
-  z-index: 201;
 }
 
 .zmiti-nickname {
   position: absolute;
-  z-index: 103;
+  z-index: 2003;
   bottom: 23vh;
   left: 50%;
   color: #fff;
@@ -372,7 +450,7 @@
 .zmiti-change-btn {
   position: absolute;
   bottom: 8vh;
-  z-index: 200;
+  z-index: 2004;
   width: 200px;
   left: 50%;
   margin-left: -100px;

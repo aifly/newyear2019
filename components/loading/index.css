@@ -61,6 +61,7 @@
   -webkit-transform: scale(0.8);
   transform: scale(0.8);
   width: 400px;
+  text-align: center;
   margin-top: -40px;
 }
 
@@ -108,7 +109,7 @@
 }
 
 .zmiti-loading .zmiti-loading-bar img {
-  width: auto;
+  width: 300px;
 }
 
 .zmiti-book1,
